@@ -869,7 +869,7 @@ def show_summary(score, total):
         "plan.md, tasks.md, review.md) enthalten die vollständige Dokumentation.",
         f"{GRAU}sdd archive <feature>{RESET} generiert je Feature README.md + DOCS.md.",
         "",
-        f"Projektdokumentation aller 9 Features:  {FETT}dokumentation.html{RESET}",
+        f"Projektdokumentation aller Features:  {FETT}dokumentation.html{RESET}",
     ], color=BLAU)
     print()
     while True:
