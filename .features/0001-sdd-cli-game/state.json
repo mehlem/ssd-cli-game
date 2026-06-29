@@ -1,0 +1,303 @@
+{
+  "feature": "0001-sdd-cli-game",
+  "feature_id": "0001-sdd-cli-game",
+  "feature_path": "0001-sdd-cli-game",
+  "feature_dir": ".features/0001-sdd-cli-game",
+  "feature_group": null,
+  "phase": "close",
+  "raw_phase": "close",
+  "effective_phase": "close",
+  "execution_phase": "close",
+  "profile": "full",
+  "autonomous": null,
+  "description": {
+    "short": "Grafisches CLI-Spiel das die SDD-Phasen spielerisch demonstriert",
+    "long": "Ein interaktives Terminal-Spiel, das neue SDD-Nutzer durch eine fiktive Feature-Reise führt. Der Spieler erlebt alle 7 SDD-Phasen (Brief → Design → Research → Plan → Implement → Review → Close) als narrative Abenteuer-Sequenz — ohne echtes Plugin, ohne Risiko, ohne Vorwissen.\n\nDas Spiel beginnt mit einer Kurzanleitung in Form einer fiktiven Geschichte: Ein PTA-Berater steckt in einem KI-gestützten Kundenprojekt, das durch Vibe-Coding-Tendenzen zu scheitern droht. Die Geschichte dient als emotionaler Einstieg und erklärt spielerisch, warum strukturiertes Vorgehen (SDD) dem chaotischen \"einfach drauf loscoden mit KI\" überlegen ist. ASCII-Grafiken begleiten die Erzählung. Die konkrete Story, die Grafiken und die Spielstruktur werden in der Design-Phase ausgearbeitet.",
+    "short_source": "brief.short_description",
+    "long_source": "brief.long_description"
+  },
+  "tasks": {
+    "completed": 7,
+    "in_progress": 0,
+    "pending": 0,
+    "blocked": 0,
+    "total": 7,
+    "ready_tasks": 0,
+    "blocked_tasks": 0
+  },
+  "task_source": {
+    "mode": "root",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0001-sdd-cli-game/tasks.md",
+    "work_packages": []
+  },
+  "work_packages": [],
+  "current_task": {
+    "id": null,
+    "heading": null,
+    "phase": null,
+    "implements": null,
+    "verification_cmd": null,
+    "work_package": null,
+    "work_package_path": null,
+    "tasks_file": null,
+    "display_ref": null
+  },
+  "artifact_map": {
+    "brief": true,
+    "spec": true,
+    "research": true,
+    "plan": true,
+    "tasks": true,
+    "review": true,
+    "scratchpad": true,
+    "continuity": true,
+    "knowledge": true
+  },
+  "continuity_state": "filled",
+  "knowledge_state": "filled",
+  "continuity_bytes": 1067,
+  "knowledge_entries": 4,
+  "has_summary": true,
+  "has_summary_compact": true,
+  "scratchpad_path": ".features/0001-sdd-cli-game/scratchpad.md",
+  "confidence": {
+    "score": 90,
+    "verdict": "GO"
+  },
+  "review": {
+    "verdict": "pass",
+    "verdict_source": null,
+    "evidence_status": null,
+    "adjudicated_at": null
+  },
+  "trace": {
+    "present": false,
+    "suspect_artifacts": 0,
+    "suspect_ids": []
+  },
+  "workers": {
+    "ledger_dir": ".features/0001-sdd-cli-game/workers",
+    "latest_dispatch": {
+      "schema_version": "sdd-dispatch-v1",
+      "dispatch_id": "a0d0ecd2df9597c34",
+      "dispatch_epoch": 0,
+      "role": "quality-reviewer",
+      "feature": "0001-sdd-cli-game",
+      "phase": "review",
+      "task": null,
+      "work_package": "none",
+      "objective": "Recovered foreground reviewer result from SubagentStop because no SubagentStart dispatch sidecar was present.",
+      "requirements": {
+        "fr": [],
+        "ac": []
+      },
+      "files_in_scope": [],
+      "verification": null,
+      "authority": "RECOVERED: This dispatch record was synthesized by SubagentStop after a foreground reviewer returned a valid result without a start-created dispatch sidecar.",
+      "recovered_dispatch": true,
+      "recovery_source": "SubagentStop",
+      "path": ".features/0001-sdd-cli-game/workers/dispatch-a0d0ecd2df9597c34.json"
+    },
+    "latest_result": {
+      "schema_version": "sdd-result-v1",
+      "dispatch_id": "a0d0ecd2df9597c34",
+      "role": "quality-reviewer",
+      "status": "FAIL",
+      "scope": "game.py (T-001 through T-007), README.md — Feature 0001-sdd-cli-game",
+      "summary": "Two important findings: ANSI padding bug in show_summary() corrupts the final box frame (game.py:54), and missing stdout encoding guard causes UnicodeEncodeError traceback on non-UTF-8 terminals (game.py:276). Three minor findings: misleading comment with unused variable, unused import, missing .gitignore entry. All 7 task verification commands pass; implementation is otherwise correct, stdlib-only, and scope-clean.",
+      "findings": [
+        {
+          "id": "F-001",
+          "severity": "important",
+          "category": "correctness",
+          "description": "print_box() calculates padding via len(wline) which counts ANSI escape bytes. show_summary() passes lines containing ANSI color codes, making padding 9+ bytes too short per line — the right box wall renders out of position on the final summary screen.",
+          "location": "game.py:54",
+          "evidence": "len('\\033[32m\\u2713\\033[0m  1 · Brief') == 31, visible length == 12, difference == 9. Confirmed by measurement script run against all 7 phase lines.",
+          "suggestion": "In print_box() line 54, compute visible length via re.sub to strip ANSI: visible = len(re.sub(r'\\x1b\\[[0-9;]*m', '', wline)); use visible instead of len(wline) for padding."
+        },
+        {
+          "id": "F-002",
+          "severity": "important",
+          "category": "correctness",
+          "description": "No sys.stdout.reconfigure() or PYTHONIOENCODING guard in game.py. On cp1252 terminals the game aborts with a raw UnicodeEncodeError traceback instead of a readable error message.",
+          "location": "game.py:276",
+          "evidence": "sys.stdout.encoding confirmed as cp1252 on this machine. Check script produced: UnicodeEncodeError: 'charmap' codec can't encode character '\\u2500' in position 23: character maps to <undefined>",
+          "suggestion": "Add sys.stdout.reconfigure(encoding='utf-8', errors='replace') as first statement in main() for graceful fallback on non-UTF-8 terminals."
+        },
+        {
+          "id": "F-003",
+          "severity": "minor",
+          "category": "readability",
+          "description": "Comment on line 43 claims ANSI bytes are excluded from centering. Variable 'clean' is assigned but never used; line.center(w) is called on the raw 'line' with ANSI bytes intact on line 44.",
+          "location": "game.py:43",
+          "evidence": "Line 43: clean = line  # Zentrieren auf sichtbare Breite (ohne ANSI-Bytes). Line 44: print(color + line.center(w) + RESET). 'clean' is never referenced.",
+          "suggestion": "Remove the misleading comment and unused 'clean' variable, or implement actual ANSI stripping."
+        },
+        {
+          "id": "F-004",
+          "severity": "minor",
+          "category": "readability",
+          "description": "import sys at game.py:7 is unused. AST walk found no sys.* attribute access anywhere in the file.",
+          "location": "game.py:7",
+          "evidence": "AST name-usage analysis: sys absent from all Attribute nodes. Bash check output: 'sys benutzt: False'",
+          "suggestion": "Remove 'import sys' — or retain if F-002 fix is adopted since sys.stdout.reconfigure requires sys."
+        },
+        {
+          "id": "F-005",
+          "severity": "minor",
+          "category": "file-organization",
+          "description": ".sdd_game_seen marker file is not listed in .gitignore. The file is already physically present in the project root. In a shared repo, committing it sets the skip-intro flag for all clones.",
+          "location": ".gitignore",
+          "evidence": "Full .gitignore read: '.sdd_game_seen' not present in any line. ls output confirms .sdd_game_seen exists in project root.",
+          "suggestion": "Add '.sdd_game_seen' to .gitignore."
+        }
+      ],
+      "verdict": "FAIL — two important findings require fixes before quality-complete. F-001 breaks visual output of the final summary screen. F-002 causes an unhandled crash with no user-readable error on non-UTF-8 terminals. Minor findings F-003 through F-005 can be addressed in a follow-up pass.",
+      "requirements_checked": [
+        {
+          "id": "FR-001",
+          "status": "PASS",
+          "evidence": "game.py:63-80 — CHAOS_ASCII and SDD_ASCII defined; show_intro() displays both",
+          "notes": ""
+        },
+        {
+          "id": "FR-002",
+          "status": "PASS",
+          "evidence": "game.py:109 'Vibe-Coding', game.py:138 SDD contrast narrative confirmed in source",
+          "notes": ""
+        },
+        {
+          "id": "FR-003",
+          "status": "PASS",
+          "evidence": "game.py:291-292 — main() loops over all 7 PHASES via run_phase()",
+          "notes": ""
+        },
+        {
+          "id": "FR-004",
+          "status": "PASS",
+          "evidence": "game.py:221-233 — run_phase() renders name, zweck, kernfrage, prompt for each phase",
+          "notes": ""
+        },
+        {
+          "id": "FR-005",
+          "status": "PASS",
+          "evidence": "AST walk: no subprocess import, no os.system('sdd') call found",
+          "notes": ""
+        },
+        {
+          "id": "FR-007",
+          "status": "PASS",
+          "evidence": "Imports: os, sys, shutil, textwrap — all Python stdlib confirmed by AST",
+          "notes": ""
+        },
+        {
+          "id": "FR-008",
+          "status": "PASS",
+          "evidence": "Works on Windows Terminal (UTF-8) and Unix. F-002 documents graceful-degradation gap on cmd.exe, which is out-of-scope per README.",
+          "notes": "AC-005 specifies Windows Terminal, not cmd.exe"
+        },
+        {
+          "id": "FR-009",
+          "status": "PASS",
+          "evidence": "game.py:267-273 — _intro_already_seen() checks .sdd_game_seen; main() offers skip when marker present",
+          "notes": ""
+        },
+        {
+          "id": "FR-010",
+          "status": "PASS",
+          "evidence": "game.py:240-257 — show_summary() lists all 7 phase names from PHASES",
+          "notes": ""
+        },
+        {
+          "id": "AC-001",
+          "status": "PASS",
+          "evidence": "game.py:287-293 — show_intro() called before phase loop in main()",
+          "notes": ""
+        },
+        {
+          "id": "AC-002",
+          "status": "PASS",
+          "evidence": "game.py:291 — run_phase(PHASES[0]) is first loop iteration after intro",
+          "notes": ""
+        },
+        {
+          "id": "AC-003",
+          "status": "PASS",
+          "evidence": "game.py:248-251 — show_summary() iterates PHASES and prints all 7 names",
+          "notes": "Visual rendering broken per F-001"
+        },
+        {
+          "id": "AC-004",
+          "status": "PASS",
+          "evidence": "AST walk: no .features/ path construction, no subprocess or sdd commands",
+          "notes": ""
+        },
+        {
+          "id": "AC-006",
+          "status": "PASS",
+          "evidence": "game.py:280-285 — input prompt shown when marker exists",
+          "notes": ""
+        },
+        {
+          "id": "AC-007",
+          "status": "PASS",
+          "evidence": "Only stdlib imports confirmed by AST import-node analysis",
+          "notes": ""
+        }
+      ],
+      "verified_clean": [
+        {
+          "area": "All 7 task verification commands (T-001 to T-007)",
+          "method": "Executed directly in Bash",
+          "result": "All passed"
+        },
+        {
+          "area": "subprocess and os.system('sdd') calls",
+          "method": "AST walk of entire file",
+          "result": "None found"
+        },
+        {
+          "area": "External package imports",
+          "method": "AST import-node analysis",
+          "result": "Only os, sys, shutil, textwrap — all stdlib"
+        },
+        {
+          "area": "run_phase() sdd command safety",
+          "method": "inspect.getsource() in Bash",
+          "result": "Clean"
+        },
+        {
+          "area": "main() control flow order",
+          "method": "Source read + Bash verification",
+          "result": "Correct: skip-check -> show_intro -> phases loop -> show_summary"
+        },
+        {
+          "area": "Compile correctness",
+          "method": "py -m py_compile game.py",
+          "result": "No errors"
+        },
+        {
+          "area": ".features/ directory creation by game code",
+          "method": "Full source read + AST walk",
+          "result": "No such call exists in game.py"
+        }
+      ],
+      "recovered_dispatch": true,
+      "warnings": [
+        "degraded: persisted after 3 attempts with Tier 1 checks only",
+        "recovered_dispatch: dispatch sidecar synthesized by SubagentStop"
+      ],
+      "path": ".features/0001-sdd-cli-game/workers/result-a0d0ecd2df9597c34.json"
+    },
+    "pending_controller_action": {
+      "feature": "0001-sdd-cli-game",
+      "phase": "review",
+      "role": "quality-reviewer",
+      "dispatch_id": "a0d0ecd2df9597c34",
+      "status": "FAIL",
+      "result_path": ".features/0001-sdd-cli-game/workers/result-a0d0ecd2df9597c34.json",
+      "transcript_path": "C:\\Users\\mehlem\\.claude\\projects\\C--Users-mehlem-OneDrive---PTA-Gruppe-Lerning-KI-Claude-Code-SDD-SSD-Beispielprojekt\\8ae8e6da-96d8-45ea-a567-015420f7b45a\\subagents\\agent-a0d0ecd2df9597c34.jsonl",
+      "has_warnings": true
+    }
+  }
+}

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDD CLI Game — Projektdokumentation</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2d3142;
+    --accent: #006FB9;
+    --accent2: #00a3ff;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --pass: #22c55e;
+    --pending: #f59e0b;
+    --code-bg: #252836;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; display: flex; min-height: 100vh; }
+
+  nav {
+    width: 280px; min-width: 280px; background: var(--surface); border-right: 1px solid var(--border);
+    padding: 2rem 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  nav h1 { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+             color: var(--accent2); padding: 0 1.5rem; margin-bottom: 1.5rem; }
+  nav ul { list-style: none; }
+  nav li a { display: block; padding: 0.45rem 1.5rem; font-size: 0.82rem; color: var(--muted);
+              text-decoration: none; border-left: 3px solid transparent; transition: all 0.15s; }
+  nav li a:hover { color: var(--text); border-left-color: var(--accent); background: rgba(0,111,185,0.08); }
+
+  main { flex: 1; padding: 3rem; max-width: 900px; }
+
+  .intro { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+            padding: 2rem; margin-bottom: 3rem; }
+  .intro h1 { font-size: 1.8rem; color: var(--accent2); margin-bottom: 0.75rem; }
+  .intro p { color: var(--muted); line-height: 1.7; margin-bottom: 0.75rem; }
+  .intro code { background: var(--code-bg); padding: 0.15rem 0.4rem; border-radius: 4px;
+                 font-size: 0.85rem; color: var(--accent2); }
+  .intro .artifact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; }
+  .artifact-badge { background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px;
+                     padding: 0.5rem 0.75rem; font-size: 0.8rem; color: var(--accent2); text-align: center; }
+
+  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+              padding: 2rem; margin-bottom: 2rem; }
+  .feature h2 { font-size: 1.15rem; color: var(--text); margin-bottom: 1.25rem;
+                 display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+  .feature .block { margin-bottom: 1.25rem; }
+  .feature h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;
+                 color: var(--muted); margin-bottom: 0.6rem; }
+  .feature p { color: var(--muted); line-height: 1.65; font-size: 0.9rem; }
+  .feature ul { list-style: none; padding: 0; }
+  .feature ul li { font-size: 0.88rem; color: var(--muted); padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+  .feature ul li:last-child { border-bottom: none; }
+  .ac-icon { color: var(--pass); margin-right: 0.4rem; font-weight: bold; }
+  code { background: var(--code-bg); padding: 0.12rem 0.35rem; border-radius: 3px; font-size: 0.82rem; color: var(--accent2); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 0.5rem; background: var(--code-bg); color: var(--muted); font-weight: 600; }
+  td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); color: var(--muted); }
+
+  .verdict-pass { background: rgba(34,197,94,0.15); color: var(--pass); padding: 0.2rem 0.6rem;
+                   border-radius: 99px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+  .verdict-pending { background: rgba(245,158,11,0.15); color: var(--pending); padding: 0.2rem 0.6rem;
+                      border-radius: 99px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+  .status-done { color: var(--pass); }
+  .status-open { color: var(--pending); }
+
+  footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+            font-size: 0.8rem; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<nav>
+  <h1>SDD CLI Game</h1>
+  <ul>
+    <li><a href="#intro">Einführung</a></li>
+    <li><a href="#0001-sdd-cli-game">0001 — SDD CLI Game (Grundgerüst)</a></li>
+    <li><a href="#0002-sdd-cli-game-interactive">0002 — Interaktive Phasen-Engine</a></li>
+    <li><a href="#0003-game-phase-examples">0003 — Phasen-Beispiel-Panels</a></li>
+    <li><a href="#0004-frage-headline">0004 — Fragen-Headline</a></li>
+    <li><a href="#0005-score-basierter-ausgang">0005 — Score-basierter Ausgang</a></li>
+    <li><a href="#0006-projekt-rename">0006 — Projekt-Umbenennung</a></li>
+    <li><a href="#0007-zweites-frageset-shuffle">0007 — Zweites Frageset + Shuffle</a></li>
+  </ul>
+</nav>
+<main>
+  <div class="intro" id="intro">
+    <h1>SDD CLI Game — Projektdokumentation</h1>
+    <p>
+      Dieses Dokument zeigt wie das SDD CLI Game selbst mit
+      <strong>Spec-Driven Development (SDD)</strong> entwickelt wurde.
+      Jedes der 9 Features durchlief die vollständige Artifact-Chain:
+    </p>
+    <div class="artifact-grid">
+      <div class="artifact-badge">brief.md<br><small>WHY</small></div>
+      <div class="artifact-badge">spec.md<br><small>WHAT</small></div>
+      <div class="artifact-badge">research.md<br><small>WHERE</small></div>
+      <div class="artifact-badge">plan.md<br><small>HOW</small></div>
+      <div class="artifact-badge">tasks.md<br><small>DO</small></div>
+      <div class="artifact-badge">review.md<br><small>VERIFY</small></div>
+    </div>
+    <p style="margin-top:1rem;">
+      Die SDD-Artefakte jedes Features enthalten die vollständige fachliche Dokumentation.
+      <code>sdd archive &lt;feature&gt;</code> generiert je Feature eine README.md und DOCS.md.
+      Der vollständige Workflow: <code>Brief → Design → Research → Plan → Implement → Review → Close</code>
+    </p>
+  </div>
+<section class="feature" id="0001-sdd-cli-game">
+  <h2>0001 — SDD CLI Game (Grundgerüst) <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Neue SDD-Nutzer starten heute direkt mit echten Features und begehen dabei typische Phasenfehler: Brief zu kurz, Design übersprungen, Implement ohne Tasks. Wer das Plugin zum ersten Mal sieht, hat keinen geführten Einstieg — Dokumentation lesen vermittelt das Denkmuster nicht. Eine sichere, spielerische Lernumgebung fehlt.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Ein interaktives CLI-Spiel, das den Spieler durch eine vollständig simulierte SDD-Reise führt. Das Spiel beginnt mit einer Kurzanleitung als fiktive Geschichte (PTA-Berater in einem KI-Projekt, das durch Vibe-Coding zu scheitern droht, rettet das Projekt mit SDD) und führt danach durch alle 7 Phasen als narrative Sequenz. Keine echten <code>sdd</code>-Befehle, keine externen Abhängigkeiten — läuft standalone im Terminal.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Das Spiel zeigt beim Start eine narrative Kurzanleitung: eine fiktive Geschichte mit ASCII-Grafiken über einen PTA-Berater in einem KI-Projekt, das durch Vibe-Coding-Tendenzen zu scheitern droht.</li>
+      <li>FR-002: Die Geschichte vermittelt explizit den Kontrast zwischen Vibe-Coding (chaotisch, riskant) und SDD (strukturiert, sicher), bevor das eigentliche Spiel beginnt.</li>
+      <li>FR-003: Das Spiel führt den Spieler sequenziell durch alle 7 SDD-Phasen: Brief → Design → Research → Plan → Implement → Review → Close.</li>
+      <li>FR-004: Jede Phase erklärt ihren Zweck, ihre Kernfrage und präsentiert eine simulierte Entscheidung oder ein simuliertes Artefakt zum Mitspielen.</li>
+      <li>FR-005: Das Spiel führt keine echten <code>sdd</code>-Befehle aus, legt keine <code>.features/</code>-Verzeichnisse an und verändert keine Projektdateien.</li>
+      <li>FR-006: Das Spiel ist in ca. 10–15 Minuten durchspielbar.</li>
+      <li>FR-007: Das Spiel läuft ohne externe Abhängigkeiten standalone im Terminal — nur die Standardbibliothek der gewählten Sprache ist erlaubt.</li>
+      <li>FR-008: Das Spiel ist auf Windows-Terminal und Unix-kompatiblen Terminals lauffähig (Cross-Platform).</li>
+      <li>FR-009: Der Spieler kann die narrative Einleitung beim zweiten Start überspringen.</li>
+      <li>FR-010: Das Spiel endet mit einer Abschluss-Zusammenfassung aller durchlaufenen Phasen.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben ein frisches Terminal, wenn der Spieler das Spiel startet, dann erscheint die narrative Einleitung mit mindestens einer ASCII-Grafik vor jeglichem Phasen-Inhalt.</li>
+      <li><span class="ac-icon">○</span> AC-002: Gegeben die Einleitung ist abgeschlossen, wenn der Spieler fortfährt, dann wird Phase 1 (Brief) mit Zweck-Erklärung und simuliertem Prompt angezeigt.</li>
+      <li><span class="ac-icon">○</span> AC-003: Gegeben ein Spieler schließt alle 7 Phasen ab, wenn die letzte Phase endet, dann erscheint eine Zusammenfassung die alle 7 Phasen namentlich auflistet.</li>
+      <li><span class="ac-icon">○</span> AC-004: Gegeben das Spiel läuft vollständig durch, wenn es endet, dann wurden keine echten <code>sdd</code>-Befehle ausgeführt und keine <code>.features/</code>-Verzeichnisse erzeugt oder verändert.</li>
+      <li><span class="ac-icon">○</span> AC-005: Gegeben ein Windows-Terminal und ein Unix-Terminal, wenn das Spiel auf beiden gestartet wird, dann läuft es fehlerfrei durch und zeigt alle Inhalte korrekt an.</li>
+      <li><span class="ac-icon">○</span> AC-006: Gegeben ein Spieler der die Einleitung bereits gesehen hat, wenn er das Spiel erneut startet, dann wird ihm eine Option angeboten die Einleitung zu überspringen.</li>
+      <li><span class="ac-icon">○</span> AC-007: Gegeben das Spiel wird gestartet, wenn es läuft, dann ist keine Installation zusätzlicher Pakete erforderlich.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>Spielgerüst mit ANSI-Basis und Terminal-Hilfsfunktionen anlegen</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>Narrative Einleitung mit PTA-Geschichte und ASCII-Grafiken implementieren</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-003</code></td><td>Skip-Intro-Logik mit <code>.sdd_game_seen</code>-Marker implementieren</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-004</code></td><td>PHASES-Datenstruktur mit allen 7 SDD-Phasen definieren</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-005</code></td><td>run_phase() Funktion implementieren</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-006</code></td><td>show_summary() implementieren und main() vollständig verdrahten</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-007</code></td><td>README.md mit Startanleitung erstellen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0002-sdd-cli-game-interactive">
+  <h2>0002 — Interaktive Phasen-Engine <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Ein SDD-Einsteiger spielt das Spiel (0001) und drückt in jeder Phase nur Enter. Er hat keine Entscheidung getroffen, keinen Fehler gemacht, kein Feedback erhalten. Das Onboarding-Ziel — SDD-Denkmuster verinnerlichen — wird nicht erreicht. Das Spiel ist eine interaktive Dokumentation, kein Lernspiel.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Jede der 7 Spielphasen erhält mindestens ein interaktives Element: eine Multiple-Choice-Frage, eine Entscheidungssituation oder eine PASS/FAIL-Urteilsfrage. Jede Antwort — richtig oder falsch — löst sofortiges Feedback mit Erklärung aus. Der Spielablauf bleibt linear; falsche Antworten blockieren nicht, sie lehren.
+
+Eine spezifische Frage in der Brief- oder Design-Phase thematisiert den Vorteil von Markdown gegenüber anderen Standardformaten (JSON, XML, YAML) als Artefakt-Format.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Die Brief-Phase enthält eine Multiple-Choice-Frage die zeigt, was brief.md leisten muss: Der Spieler wählt aus 4 Optionen, welche der 5 Pflichtabschnitte (Motivation, Problem, Vision, Context, Constraints) in einer brief.md stehen müssen — und warum diese Phase vor jeder technischen Entscheidung kommt.</li>
+      <li>FR-002: Die Brief- oder Design-Phase enthält eine Frage über den Vorteil von Markdown gegenüber JSON, XML und YAML als Artefakt-Format in SDD.</li>
+      <li>FR-003: Die Design-Phase enthält eine Urteilsfrage: Der Spieler bewertet ein vorgegebenes Acceptance Criterion als gut formuliert oder schlecht formuliert.</li>
+      <li>FR-004: Die Research-Phase enthält eine Entscheidungsfrage die die Evidence-Only-Regel vermittelt: Der Spieler sieht drei Aussagen über eine Codebasis und muss entscheiden, welche davon ein bestätigter Fakt (mit Dateireferenz), eine Hypothese oder ein Unbekanntes ist — um zu verstehen dass in Research kein Claim ohne gelesene Datei als Fakt gilt.</li>
+      <li>FR-005: Die Plan-Phase enthält eine Reihenfolge-Entscheidung: Der Spieler ordnet 3 Tasks in die korrekte Abhängigkeitsreihenfolge.</li>
+      <li>FR-006: Die Implement-Phase enthält eine Entscheidungssituation: Das Verifikationskommando schlägt fehl — was tut der Entwickler?</li>
+      <li>FR-007: Die Review-Phase enthält eine PASS/FAIL-Urteilsfrage: Ein AC und eine Code-Beschreibung werden gegenübergestellt.</li>
+      <li>FR-008: Die Close-Phase enthält eine Reflexionsfrage: Was gehört in ein knowledge.md — Spieler wählt aus 3 Optionen.</li>
+      <li>FR-009: Jede Interaktion zeigt nach der Antwort Feedback das explizit das zugrundeliegende SDD-Prinzip nennt: bei richtiger Antwort eine Bestätigung mit dem Prinzip-Grund ("In SDD gilt: …"); bei falscher Antwort die korrekte Antwort plus den SDD-Grundsatz der dahintersteht. Feedback ist keine bloße Wertung ("richtig/falsch") sondern eine Lernaussage über das Plugin-Verhalten.</li>
+      <li>FR-010: Falsche Antworten blockieren den Spielfortschritt nicht — das Spiel geht nach dem Feedback weiter.</li>
+      <li>FR-011: Am Spielende zeigt die Zusammenfassung die Anzahl richtig beantworteter Fragen (Score).</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben die Brief-Phase startet, wenn der Spieler die Interaktion erreicht, dann wird eine Multiple-Choice-Frage mit mindestens 3 Optionen angezeigt, die den Begriff "brief.md" und mindestens zwei der fünf Pflichtabschnitte (Motivation, Problem, Vision, Context, Constraints) nennt.</li>
+      <li><span class="ac-icon">○</span> AC-002: Gegeben eine frühe Phase (Brief oder Design), wenn der Spieler die Interaktion erreicht, dann enthält eine Frage die Begriffe "Markdown", "JSON" und mindestens ein weiteres Format.</li>
+      <li><span class="ac-icon">○</span> AC-003: Gegeben alle 7 Phasen wurden durchlaufen, wenn das Spiel endet, dann hat jede Phase genau eine Interaktion gehabt (verifizierbar durch 7 Interaktionselemente im Quelltext).</li>
+      <li><span class="ac-icon">○</span> AC-004: Gegeben ein Spieler wählt eine falsche Antwort, wenn das Feedback erscheint, dann enthält es die richtige Antwort und einen Satz der mit "In SDD" oder "Das SDD-Plugin" beginnt und das zugrundeliegende Prinzip erklärt.</li>
+      <li><span class="ac-icon">○</span> AC-005: Gegeben ein Spieler wählt eine richtige Antwort, wenn das Feedback erscheint, dann enthält es eine Bestätigung und einen Satz der mit "In SDD" oder "Das SDD-Plugin" beginnt und das Prinzip hinter der richtigen Antwort begründet.</li>
+      <li><span class="ac-icon">○</span> AC-006: Gegeben eine falsche Antwort wurde gegeben, wenn das Feedback angezeigt wurde, dann fährt das Spiel mit der nächsten Phase fort (kein Block).</li>
+      <li><span class="ac-icon">○</span> AC-007: Gegeben alle Interaktionen wurden beantwortet, wenn die Zusammenfassung erscheint, dann zeigt sie die Anzahl richtiger Antworten (z.B. "5 von 7 richtig").</li>
+      <li><span class="ac-icon">○</span> AC-008: Gegeben das Spiel wird gestartet, dann werden keine neuen externen Pakete benötigt (nur Python stdlib).</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>ask_question()-Infrastruktur und PHASES-Schema anlegen</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>Interaktionsdaten Brief-Phase (brief.md-Abschnitte)</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-003</code></td><td>Interaktionsdaten Design-Phase (Markdown-Frage + AC-Urteil)</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-004</code></td><td>Interaktionsdaten Research + Plan-Phase</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-005</code></td><td>Interaktionsdaten Implement + Review + Close-Phase</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0003-game-phase-examples">
+  <h2>0003 — Phasen-Beispiel-Panels <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Ein Spieler der das SDD-Lernspiel durchspielt versteht die Prinzipien jeder Phase — aber nicht das konkrete Handwerk. Nach dem Feedback einer Phase fehlt die Brücke zur Praxis: Welchen Befehl tippe ich? Was tut Claude Code automatisch? Welche Datei liegt danach auf der Festplatte? Diese Lücke verhindert, dass Spieler das SDD-Plugin direkt nach dem Spiel eigenständig einsetzen können.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Nach dem Feedback jeder Phase erscheint automatisch ein Beispiel-Panel mit vier Zeilen (🧑 Product Owner / 👤 Entwickler / 🤖 Claude Code / 📄 Artefakt), das zeigt wie diese Phase in einer echten SDD-Session aussieht. Das Panel erscheint vor der Frage der Phase. Der Zurück-Mechanismus (z-Taste) wird entfernt, da er mit dem neuen Panel-Layout mehrdeutig würde. Die Beispielinhalte für alle 7 Phasen sind in brief.md Q3 vollständig dokumentiert und abgenommen.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Das Spiel zeigt in jeder Phase ein Beispiel-Panel mit genau vier Feldern: 🧑 Product Owner, 👤 Entwickler, 🤖 Claude Code, 📄 Artefakt.</li>
+      <li>FR-002: Das Beispiel-Panel erscheint automatisch vor der Phasenfrage, ohne Extra-Tastendruck.</li>
+      <li>FR-003: In Phasen ohne PO-Beteiligung zeigt das PO-Feld explizit "Keine Aufgabe in dieser Phase" plus eine kurze Begründung.</li>
+      <li>FR-004: Der Zurück-Mechanismus (z-Taste) wird aus dem Spiel entfernt.</li>
+      <li>FR-005: Die Beispielinhalte entsprechen den in brief.md Q3 abgenommenen Texten für alle 7 Phasen.</li>
+      <li>FR-006: Das Beispiel-Panel ist kompakt genug, um zusammen mit der Phasenfrage auf einen Bildschirm zu passen.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben eine laufende Spielsession, wenn der Spieler das Feedback einer Phase bestätigt, dann erscheint das Beispiel-Panel automatisch vor der nächsten Phasenfrage — ohne zusätzlichen Tastendruck.</li>
+      <li><span class="ac-icon">○</span> AC-002: Gegeben Phase 1 (Brief), wenn das Beispiel-Panel angezeigt wird, dann enthält es alle vier Felder (🧑 PO, 👤 Entwickler, 🤖 Claude Code, 📄 Artefakt) mit den abgenommenen Inhalten aus brief.md Q3.</li>
+      <li><span class="ac-icon">○</span> AC-003: Gegeben Phase 3 (Research), wenn das Beispiel-Panel angezeigt wird, dann enthält das PO-Feld den Text "Keine Aufgabe in dieser Phase" mit Begründung.</li>
+      <li><span class="ac-icon">○</span> AC-004: Gegeben eine laufende Spielsession, wenn der Spieler eine Antwort bestätigt, dann ist die z-Taste deaktiviert und hat keine Wirkung.</li>
+      <li><span class="ac-icon">○</span> AC-005: Gegeben alle 7 Phasen, wenn die Beispiel-Panels angezeigt werden, dann stimmen die angezeigten Texte exakt mit den in brief.md Q3 abgenommenen Inhalten überein.</li>
+      <li><span class="ac-icon">○</span> AC-006: Gegeben ein Terminal mit 80 Zeichen Breite, wenn das Beispiel-Panel angezeigt wird, dann passt es zusammen mit der Phasenfrage auf einen Bildschirm ohne Scrollen.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>beispiel-Daten in alle 7 PHASES-Dicts eintragen</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>Beispiel-Panel in run_phase() rendern</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-003</code></td><td>Zurück-Mechanismus entfernen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0004-frage-headline">
+  <h2>0004 — Fragen-Headline <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Die Fragen-Box jeder Phase erscheint ohne Überschrift. Spieler sehen sofort den Fragetext, ohne einen einleitenden Kontext zu haben.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Die Fragen-Box jeder Phase erhält als erste Zeile die Überschrift "Hier eine Verständnisfrage zur Arbeit mit SDD", gefolgt von einer Leerzeile und dem eigentlichen Fragetext.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Jede Fragen-Box zeigt als erste Zeile "Hier eine Verständnisfrage zur Arbeit mit SDD", dann eine Leerzeile, dann den Fragetext.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben eine beliebige Phase, wenn die Fragen-Box angezeigt wird, dann lautet die erste Zeile der Box exakt "Hier eine Verständnisfrage zur Arbeit mit SDD".</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>Headline in Fragen-Box einfügen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0005-score-basierter-ausgang">
+  <h2>0005 — Score-basierter Ausgang <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p><code>show_summary()</code> zeigt immer denselben Erfolgstext ("Du hast das SmartFlow-Projekt gerettet."), unabhängig davon wie viele Fragen der Spieler richtig beantwortet hat. Bei niedrigem Score ist diese Aussage nicht zutreffend und motiviert nicht zur Wiederholung.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p><code>show_summary()</code> zeigt abhängig vom Score zwei unterschiedliche Texte: bei mehr als 6 richtigen Antworten den bisherigen Erfolgstext, bei 6 oder weniger einen ermutigenden Text der zur Wiederholung einlädt.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Bei score > 6 zeigt <code>show_summary()</code> den bisherigen Erfolgstext ("Du hast das SmartFlow-Projekt gerettet. Jana nickt anerkennend.").</li>
+      <li>FR-002: Bei score ≤ 6 zeigt <code>show_summary()</code> einen ermutigenden Text, der das SmartFlow-Projekt nennt und zur Wiederholung einlädt.</li>
+      <li>FR-003: In beiden Pfaden werden Score und Sterne-Anzeige weiterhin angezeigt.</li>
+      <li>FR-004: In beiden Pfaden wird die durchlaufene Phasenliste weiterhin angezeigt.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben score=7, wenn show_summary(7, 7) aufgerufen wird, dann enthält die Ausgabe "Du hast das SmartFlow-Projekt gerettet".</li>
+      <li><span class="ac-icon">○</span> AC-002: Gegeben score=6, wenn show_summary(6, 7) aufgerufen wird, dann enthält die Ausgabe NICHT "Du hast das SmartFlow-Projekt gerettet" sondern einen ermutigenden Text mit "SmartFlow".</li>
+      <li><span class="ac-icon">○</span> AC-003: Gegeben score=0, wenn show_summary(0, 7) aufgerufen wird, dann enthält die Ausgabe einen ermutigenden Text mit "SmartFlow".</li>
+      <li><span class="ac-icon">○</span> AC-004: In beiden Pfaden enthält die Ausgabe "von 7" (Score-Anzeige).</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>Score-abhängigen Text in show_summary() einbauen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0006-projekt-rename">
+  <h2>0006 — Projekt-Umbenennung <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p><code>game.py</code> nennt das Beispielprojekt an 6 Stellen "SmartFlow" bzw. "smart-flow". In der Einleitung heißt das Projekt bereits "PromptAndPray good vibes 2.0". Die Inkonsistenz verwirrt Spieler.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Alle 6 Vorkommen von "SmartFlow" und "smart-flow" in <code>game.py</code> werden durch "PromptAndPray" bzw. "promptandpray" ersetzt.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: <code>game.py</code> enthält nach der Änderung keinen Treffer mehr für "SmartFlow" oder "smart-flow" (case-insensitive).</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: <code>grep -i "smartflow\|smart-flow" game.py</code> gibt keine Treffer zurück.</li>
+      <li><span class="ac-icon">○</span> AC-002: <code>grep -i "promptandpray" game.py</code> liefert mindestens 6 Treffer.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>SmartFlow durch PromptAndPray ersetzen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0007-zweites-frageset-shuffle">
+  <h2>0007 — Zweites Frageset + Shuffle <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Das SDD-Lernspiel hat pro Phase genau eine Frage mit vier Antworten in fester Reihenfolge. Nach dem ersten Durchlauf kennen Spieler die richtige Antwortnummer auswendig. Der Lerneffekt geht verloren, weil Positionslernen das inhaltliche Verstehen ersetzt.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Jede Phase erhält ein zweites alternatives Fragenset. Beim Spielstart wird für jede Phase zufällig eine der zwei Fragen ausgewählt. Die Antwortoptionen werden bei jeder Frage in zufälliger Reihenfolge angezeigt. Das Spiel behält die korrekte Auswertung bei, unabhängig von der gemischten Reihenfolge. Die 7 neuen Fragen sind in brief.md Q3 dokumentiert und abgenommen.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Jede der 7 Phasen hat zwei alternative Fragensets, die gleichwertig das SDD-Prinzip der jeweiligen Phase testen.</li>
+      <li>FR-002: Beim Spielstart wird für jede Phase zufällig (gleichverteilt) eines der zwei Fragensets gewählt.</li>
+      <li>FR-003: Die Antwortoptionen jeder Frage werden bei jedem Spielstart in zufälliger Reihenfolge angezeigt.</li>
+      <li>FR-004: Die Auswertung (richtig/falsch) funktioniert korrekt unabhängig von der gemischten Antwort-Reihenfolge.</li>
+      <li>FR-005: Feedback-Texte (richtig und falsch) bleiben inhaltlich zur gewählten Frage passend.</li>
+      <li>FR-006: Der Score wird weiterhin korrekt akkumuliert (1 Punkt pro richtiger Antwort, 7 Punkte maximal).</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben zwei Spielstarts hintereinander, wenn beide Male Phase 1 gespielt wird, dann erscheint mindestens einmal eine andere Frage oder eine andere Antwort-Reihenfolge (statistisch: bei 10 Starts ist die Wahrscheinlichkeit identischer Sequenz < 0,1%).</li>
+      <li><span class="ac-icon">○</span> AC-002: Gegeben eine beliebige Phase, wenn die richtige Antwort gewählt wird (auch nach dem Mischen), dann zeigt das Spiel "✓ Richtig!" und den korrekten feedback_richtig-Text.</li>
+      <li><span class="ac-icon">○</span> AC-003: Gegeben eine beliebige Phase, wenn eine falsche Antwort gewählt wird, dann zeigt das Spiel "✗ Nicht ganz." und den korrekten feedback_falsch-Text der gewählten Frage.</li>
+      <li><span class="ac-icon">○</span> AC-004: Gegeben ein kompletter Durchlauf mit 7 richtigen Antworten, dann ist der Score 7.</li>
+      <li><span class="ac-icon">○</span> AC-005: Gegeben ein Import von <code>game.PHASES</code>, dann hat jede Phase genau 2 Einträge in einer Fragensets-Liste (verifizierbar per Python-Assertion).</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>fragen-Liste mit zweitem Frageset in alle 7 PHASES-Dicts eintragen</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>run_phase() auf fragen-Liste umstellen + Shuffle einbauen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+  <footer>Generiert mit generate_docs.py · SDD CLI Game · PTA GmbH</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{
+  "feature": "0008-intro-ux-verbesserung",
+  "feature_id": "0008-intro-ux-verbesserung",
+  "feature_path": "0008-intro-ux-verbesserung",
+  "feature_dir": ".features/0008-intro-ux-verbesserung",
+  "feature_group": null,
+  "phase": "close",
+  "raw_phase": "close",
+  "effective_phase": "close",
+  "execution_phase": "close",
+  "profile": "lite",
+  "autonomous": null,
+  "description": {
+    "short": "Loading-Animation, Exit-Option und Titel-Pause-Text verbessern",
+    "long": null,
+    "short_source": "summary.goal",
+    "long_source": null
+  },
+  "tasks": {
+    "completed": 2,
+    "in_progress": 0,
+    "pending": 0,
+    "blocked": 0,
+    "total": 2,
+    "ready_tasks": 0,
+    "blocked_tasks": 0
+  },
+  "task_source": {
+    "mode": "root",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0008-intro-ux-verbesserung/tasks.md",
+    "work_packages": []
+  },
+  "work_packages": [],
+  "current_task": {
+    "id": null,
+    "heading": null,
+    "phase": null,
+    "implements": null,
+    "verification_cmd": null,
+    "work_package": null,
+    "work_package_path": null,
+    "tasks_file": null,
+    "display_ref": null
+  },
+  "artifact_map": {
+    "brief": false,
+    "spec": true,
+    "research": false,
+    "plan": false,
+    "tasks": true,
+    "review": true,
+    "scratchpad": true,
+    "continuity": true,
+    "knowledge": true
+  },
+  "continuity_state": "empty",
+  "knowledge_state": "empty",
+  "continuity_bytes": 58,
+  "knowledge_entries": 0,
+  "has_summary": true,
+  "has_summary_compact": true,
+  "scratchpad_path": ".features/0008-intro-ux-verbesserung/scratchpad.md",
+  "confidence": {
+    "score": 0,
+    "verdict": "pending"
+  },
+  "review": {
+    "verdict": "pass",
+    "verdict_source": null,
+    "evidence_status": null,
+    "adjudicated_at": null
+  },
+  "trace": {
+    "present": false,
+    "suspect_artifacts": 0,
+    "suspect_ids": []
+  }
+}

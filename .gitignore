@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# SDD game state
+.sdd_game_seen
+
+# SDD local patches
+.sdd-local-patches/
+.claude/.sdd-local-patches/
+
+# OS
+.DS_Store
+Thumbs.db
+bash.exe.stackdump

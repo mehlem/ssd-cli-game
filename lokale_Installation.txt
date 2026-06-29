@@ -1,0 +1,28 @@
+claude gestartet im neuen Projektverzeichnis mit dem Parameter --plugin-dir unter Angabe des Pfades "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD Onboarding/sdd-plugin-2.1.0-alpha/sdd-plugin", also vollständige Command zum Starten von Claude:
+
+claude --plugin-dir "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD Onboarding/sdd-plugin-2.1.0-alpha/sdd-plugin"
+
+Danach folgenden Slash Befehl ausführen:  /sdd:sdd-setup
+
+=> Claude installiert das Plugin:
+Setup succeeded. Now verifying all components.
+
+  Ran 1 shell command
+8 skills available
+
+All components verified. SDD v2.1.0-alpha is fully installed in this project.
+
+Summary:
+- 6 agents, 7 phase skills, main skill, help skill, setup skill — all installed
+- CLI shim at .claude/bin/sdd
+- 13 lifecycle hooks registered in .claude/settings.json
+- 126 files tracked in the manifest
+- .features/ workspace and INDEX.md created
+- CLAUDE.md updated with SDD instructions block
+
+Next steps:
+- sdd init <feature-name> "description" — start your first feature (full or --mode lite for small fixes)
+- sdd status — inspect active feature state at any time
+- /sdd-help — route any SDD questions to the right docs
+
+✻ Cooked for 1m 15s

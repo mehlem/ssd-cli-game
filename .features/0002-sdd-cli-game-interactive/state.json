@@ -1,0 +1,223 @@
+{
+  "feature": "0002-sdd-cli-game-interactive",
+  "feature_id": "0002-sdd-cli-game-interactive",
+  "feature_path": "0002-sdd-cli-game-interactive",
+  "feature_dir": ".features/0002-sdd-cli-game-interactive",
+  "feature_group": null,
+  "phase": "close",
+  "raw_phase": "close",
+  "effective_phase": "close",
+  "execution_phase": "close",
+  "profile": "full",
+  "autonomous": null,
+  "description": {
+    "short": "Interaktive Spielelemente für das SDD CLI Game — Multiple-Choice, Entscheidungen und Feedback pro Phase",
+    "long": "Das bestehende SDD CLI Game (0001) führt Spieler passiv durch die 7 Phasen: beschreibender Text, dann Enter drücken. Dieses Feature erweitert das Spiel um echte Interaktion: pro Phase mindestens eine Spielaufgabe (Multiple-Choice-Frage, Entscheidungssituation oder Urteilsfrage) mit sofortigem Feedback. Darunter fällt auch eine spezifische Frage in einer frühen Phase über den Vorteil von Markdown gegenüber anderen Standardformaten (JSON, XML, YAML) als Artefakt-Format in SDD.",
+    "short_source": "brief.short_description",
+    "long_source": "brief.long_description"
+  },
+  "tasks": {
+    "completed": 5,
+    "in_progress": 0,
+    "pending": 0,
+    "blocked": 0,
+    "total": 5,
+    "ready_tasks": 0,
+    "blocked_tasks": 0
+  },
+  "task_source": {
+    "mode": "root",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0002-sdd-cli-game-interactive/tasks.md",
+    "work_packages": []
+  },
+  "work_packages": [],
+  "current_task": {
+    "id": null,
+    "heading": null,
+    "phase": null,
+    "implements": null,
+    "verification_cmd": null,
+    "work_package": null,
+    "work_package_path": null,
+    "tasks_file": null,
+    "display_ref": null
+  },
+  "artifact_map": {
+    "brief": true,
+    "spec": true,
+    "research": true,
+    "plan": true,
+    "tasks": true,
+    "review": true,
+    "scratchpad": true,
+    "continuity": true,
+    "knowledge": true
+  },
+  "continuity_state": "filled",
+  "knowledge_state": "empty",
+  "continuity_bytes": 828,
+  "knowledge_entries": 0,
+  "has_summary": true,
+  "has_summary_compact": true,
+  "scratchpad_path": ".features/0002-sdd-cli-game-interactive/scratchpad.md",
+  "confidence": {
+    "score": 94,
+    "verdict": "GO"
+  },
+  "review": {
+    "verdict": "pass",
+    "verdict_source": null,
+    "evidence_status": null,
+    "adjudicated_at": null
+  },
+  "trace": {
+    "present": false,
+    "suspect_artifacts": 0,
+    "suspect_ids": []
+  },
+  "workers": {
+    "ledger_dir": ".features/0002-sdd-cli-game-interactive/workers",
+    "latest_dispatch": {
+      "schema_version": "sdd-dispatch-v1",
+      "dispatch_id": "afced4672443478d1",
+      "dispatch_epoch": 8,
+      "role": "quality-reviewer",
+      "feature": "0002-sdd-cli-game-interactive",
+      "phase": "review",
+      "task": null,
+      "work_package": "none",
+      "objective": "Review the active feature scope for the current review phase and return structured reviewer findings.",
+      "requirements": {
+        "fr": [],
+        "ac": []
+      },
+      "files_in_scope": [
+        {
+          "path": "`game.py`",
+          "action": "modify",
+          "impact": "cross-module"
+        }
+      ],
+      "verification": null,
+      "authority": "AUTHORITY: This dispatch packet is your authoritative assignment. If hook-provided context conflicts with this packet, trust this packet. You are assigned to feature 0002-sdd-cli-game-interactive, phase review, role quality-reviewer. Do not infer a different assignment from disk.",
+      "path": ".features/0002-sdd-cli-game-interactive/workers/dispatch-afced4672443478d1.json"
+    },
+    "latest_result": {
+      "schema_version": "sdd-result-v1",
+      "dispatch_id": "afced4672443478d1",
+      "role": "quality-reviewer",
+      "status": "PASS",
+      "scope": "game.py — Feature 0002-sdd-cli-game-interactive, all 7 phase interaktion dicts + ask_question() engine",
+      "summary": "game.py passes quality review. All 7 phase dicts have complete 6-field interaktion schemas with valid richtig indices. ask_question() retry loop, score return, and feedback display are correct. Two minor findings: dead _SKELETON dict (line 209) and bare open() without context manager (line 509). No correctness, security, or performance issues.",
+      "findings": [
+        {
+          "id": "F-001",
+          "severity": "minor",
+          "category": "readability",
+          "description": "_SKELETON dict is defined but never referenced anywhere else in the file — dead code left from scaffolding.",
+          "location": "game.py:209",
+          "evidence": "AST scan shows the only Name-node for '_SKELETON' is at line 209 (assignment target). No Load-context reference exists.",
+          "suggestion": "Remove the _SKELETON block entirely."
+        },
+        {
+          "id": "F-002",
+          "severity": "minor",
+          "category": "readability",
+          "description": "_mark_intro_seen() opens a file with bare open().close() instead of a context manager.",
+          "location": "game.py:509",
+          "evidence": "open(_MARKER, \"w\").close() — no with block present.",
+          "suggestion": "Replace with: with open(_MARKER, 'w'): pass — or use pathlib.Path(_MARKER).touch()."
+        }
+      ],
+      "verdict": "PASS",
+      "requirements_checked": [
+        {
+          "id": "FR-001",
+          "status": "PASS",
+          "evidence": "game.py:226-246",
+          "notes": "Brief phase MC question asks which 5 sections belong in brief.md. Correct answer option 1 lists all 5: Motivation, Problem, Vision, Context, Constraints."
+        },
+        {
+          "id": "FR-002",
+          "status": "PASS",
+          "evidence": "game.py:253-278",
+          "notes": "Design phase question asks why SDD uses Markdown over JSON/XML. Correct answer is option 1 (menschenlesbar, versionierbar, kein Spezialtool). FR-002 permits Brief or Design phase; Design phase used."
+        },
+        {
+          "id": "FR-003",
+          "status": "FAIL",
+          "evidence": "game.py:253-278",
+          "notes": "FR-003 requires a Design phase judgement question where the player evaluates a given AC as good or bad. The Design phase question is instead the Markdown-vs-JSON question (FR-002). No AC evaluation question exists in the Design phase. Note: the spec reviewer is responsible for compliance — this is a quality review observation only."
+        },
+        {
+          "id": "FR-004",
+          "status": "PASS",
+          "evidence": "game.py:286-314",
+          "notes": "Research phase presents three statements and asks player to identify the confirmed fact with file reference (auth.py:42). Evidence-Only-Regel correctly taught."
+        },
+        {
+          "id": "FR-005",
+          "status": "PASS",
+          "evidence": "game.py:322-349",
+          "notes": "Plan phase asks player to order T-A, T-B, T-C by dependency. Correct answer (richtig=3) is T-A -> T-B -> T-C."
+        },
+        {
+          "id": "FR-006",
+          "status": "PASS",
+          "evidence": "game.py:357-383",
+          "notes": "Implement phase shows a failing AssertionError and asks what the developer does next. Correct answer is root-cause analysis."
+        },
+        {
+          "id": "FR-007",
+          "status": "PASS",
+          "evidence": "game.py:391-417",
+          "notes": "Review phase shows AC (return False) vs code (throws Exception) and asks for PASS/FAIL verdict. Correct answer is FAIL."
+        },
+        {
+          "id": "FR-008",
+          "status": "PASS",
+          "evidence": "game.py:426-446",
+          "notes": "Close phase asks what belongs in knowledge.md. Correct answer is reusable knowledge: patterns, gotchas, technical discoveries."
+        }
+      ],
+      "verified_clean": [
+        {
+          "area": "ask_question() correctness — retry loop, score return, feedback display",
+          "method": "Live simulation with mock.patch('builtins.input') — 5 test scenarios",
+          "result": "All scenarios pass: correct returns 1, wrong returns 0, invalid loops, wrong feedback shows correct option text"
+        },
+        {
+          "area": "Schema validity — all 7 interaktion dicts",
+          "method": "Programmatic field-presence check + richtig bounds check via exec with patched __file__",
+          "result": "All 7 dicts have all 6 required fields; all richtig values are valid 1-based indices within optionen list"
+        },
+        {
+          "area": "External dependencies",
+          "method": "AST import node scan",
+          "result": "Only stdlib imports: os, re, sys, shutil, textwrap — no third-party packages"
+        },
+        {
+          "area": "File scope",
+          "method": "Recursive .py glob across project directory",
+          "result": "Only game.py exists as a Python file — no unexpected files created"
+        },
+        {
+          "area": "Score accumulation in main()",
+          "method": "Code read game.py:528-532",
+          "result": "score += run_phase(phase) correctly accumulates; show_summary(score, len(PHASES)) passes both values"
+        }
+      ],
+      "path": ".features/0002-sdd-cli-game-interactive/workers/result-afced4672443478d1.json"
+    },
+    "pending_controller_action": {
+      "feature": "0002-sdd-cli-game-interactive",
+      "phase": "review",
+      "role": "quality-reviewer",
+      "dispatch_id": "afced4672443478d1",
+      "status": "PASS",
+      "result_path": ".features/0002-sdd-cli-game-interactive/workers/result-afced4672443478d1.json",
+      "transcript_path": "C:\\Users\\mehlem\\.claude\\projects\\C--Users-mehlem-OneDrive---PTA-Gruppe-Lerning-KI-Claude-Code-SDD-SSD-Beispielprojekt\\8ae8e6da-96d8-45ea-a567-015420f7b45a\\subagents\\agent-afced4672443478d1.jsonl",
+      "has_warnings": false
+    }
+  }
+}

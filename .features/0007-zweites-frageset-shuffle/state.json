@@ -1,0 +1,78 @@
+{
+  "feature": "0007-zweites-frageset-shuffle",
+  "feature_id": "0007-zweites-frageset-shuffle",
+  "feature_path": "0007-zweites-frageset-shuffle",
+  "feature_dir": ".features/0007-zweites-frageset-shuffle",
+  "feature_group": null,
+  "phase": "close",
+  "raw_phase": "close",
+  "effective_phase": "close",
+  "execution_phase": "close",
+  "profile": "full",
+  "autonomous": null,
+  "description": {
+    "short": "Zweites Frageset pro Phase + zufällige Antwort-Reihenfolge",
+    "long": "Das Spiel hat pro Phase genau eine Frage mit vier Antworten in fester Reihenfolge. Wer das Spiel ein zweites Mal spielt, kennt bereits die richtige Antwortnummer auswendig — der Lerneffekt geht verloren. Dieses Feature fügt ein zweites Frageset hinzu (7 neue Fragen) und mischt die Antwort-Reihenfolge bei jedem Spielstart, sodass Wiederholen echtes Verstehen erfordert.",
+    "short_source": "brief.short_description",
+    "long_source": "brief.long_description"
+  },
+  "tasks": {
+    "completed": 2,
+    "in_progress": 0,
+    "pending": 0,
+    "blocked": 0,
+    "total": 2,
+    "ready_tasks": 0,
+    "blocked_tasks": 0
+  },
+  "task_source": {
+    "mode": "root",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0007-zweites-frageset-shuffle/tasks.md",
+    "work_packages": []
+  },
+  "work_packages": [],
+  "current_task": {
+    "id": null,
+    "heading": null,
+    "phase": null,
+    "implements": null,
+    "verification_cmd": null,
+    "work_package": null,
+    "work_package_path": null,
+    "tasks_file": null,
+    "display_ref": null
+  },
+  "artifact_map": {
+    "brief": true,
+    "spec": true,
+    "research": true,
+    "plan": true,
+    "tasks": true,
+    "review": true,
+    "scratchpad": true,
+    "continuity": true,
+    "knowledge": true
+  },
+  "continuity_state": "partial",
+  "knowledge_state": "empty",
+  "continuity_bytes": 362,
+  "knowledge_entries": 0,
+  "has_summary": true,
+  "has_summary_compact": true,
+  "scratchpad_path": ".features/0007-zweites-frageset-shuffle/scratchpad.md",
+  "confidence": {
+    "score": 84,
+    "verdict": "GO"
+  },
+  "review": {
+    "verdict": "pass",
+    "verdict_source": null,
+    "evidence_status": null,
+    "adjudicated_at": null
+  },
+  "trace": {
+    "present": true,
+    "suspect_artifacts": 0,
+    "suspect_ids": []
+  }
+}
