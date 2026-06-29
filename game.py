@@ -228,7 +228,7 @@ def show_intro():
         "Montag, 08:47 Uhr. PTA-Buero, Konferenzraum 3.",
         "",
         "Max Muster, Consultant bei der PTA GmbH, starrt auf seinen Bildschirm.",
-        "Das Schulungsprojekt 'PromptAndPray good vibes 2.0' sollte laengst fertig sein.",
+        "Das Schulungsprojekt 'PromptAndPray good vibes' sollte laengst fertig sein.",
     ], color=GELB)
     print()
     _print_side_by_side(_vibe_box_lines(), _chaos_box_lines(), WEISS, ORANGE)
@@ -288,7 +288,7 @@ def show_intro():
         "",
         "Du durchläufst alle 7 Phasen:",
         "",
-        "  1. Brief      — WARUM existiert das Feature?",
+        "  1. Brief       — WARUM existiert das Feature?",
         "  2. Design      — WAS soll es genau tun?",
         "  3. Research    — WO lebt es im Code?",
         "  4. Plan        — WIE wird es gebaut?",
