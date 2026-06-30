@@ -1,0 +1,41 @@
+# SDD project customization.
+#
+# Copy this file to .sdd/customization.yaml with:
+#   sdd customize init
+#
+# Schema:
+#   schema_version: 1
+#   notes: scope-keyed lists of short guidance bullets.
+#
+# Supported interpolation tokens are substituted when emitted to Claude:
+#   {{FEATURE}}, {{FEATURE_ID}}, {{PHASE}}, {{DATE}}
+#
+# After editing, validate with:
+#   sdd customize check .sdd/customization.yaml
+
+schema_version: 1
+
+notes:
+  # Injected at SessionStart and subagent dispatch for every phase/role.
+  global: []
+
+  # Phase-scoped notes. Injected only when the active feature is in that phase.
+  brief: []
+  design: []
+  research: []
+  plan: []
+  implement: []
+  review: []
+  close: []
+
+  # Agent-scoped notes. Injected only into dispatch packets for that role.
+  research-scout: []
+  plan-drafter: []
+  implementer: []
+  spec-reviewer: []
+  quality-reviewer: []
+  archivist: []
+
+  # Claude-writable learned notes. Use literal dates like "2026-04-28: ...";
+  # do not use {{DATE}}, because it would re-render as today's date later.
+  learned: []

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$PROJECT_ROOT/.claude}"
+exec bash "$PLUGIN_ROOT/skills/spec-driven-development/scripts/sdd.sh" "$@"

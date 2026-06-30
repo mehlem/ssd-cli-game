@@ -1,0 +1,117 @@
+{
+  "schema_version": 2,
+  "artifact_links": {
+    "spec": {
+      "derived_from": {
+        "targets": [
+          "BRIEF-*"
+        ],
+        "min": 1,
+        "max": 1,
+        "profile": ["full", "deep"],
+        "description": "Every spec should derive from exactly one brief artifact"
+      }
+    },
+    "research": {
+      "derived_from": {
+        "targets": [
+          "SPEC-*"
+        ],
+        "min": 1,
+        "max": 1,
+        "description": "Every research artifact should derive from exactly one spec artifact"
+      }
+    },
+    "plan": {
+      "derived_from": {
+        "targets": [
+          "SPEC-*",
+          "RESEARCH-*"
+        ],
+        "min": 1,
+        "description": "Every plan should derive from spec and/or research"
+      }
+    },
+    "tasks": {
+      "derived_from": {
+        "targets": [
+          "PLAN-*"
+        ],
+        "min": 1,
+        "max": 1,
+        "profile": ["full", "deep"],
+        "description": "Every tasks artifact should derive from exactly one plan artifact"
+      }
+    },
+    "review": {
+      "derived_from": {
+        "targets": [
+          "SPEC-*"
+        ],
+        "min": 1,
+        "max": 1,
+        "description": "Every review should derive from exactly one spec artifact"
+      }
+    }
+  },
+  "body_fields": {
+    "plan.Addresses": {
+      "source_kind": "ph",
+      "edge_type": "addresses",
+      "targets": [
+        "FR-[0-9]{3}"
+      ],
+      "min": 1,
+      "coverage": true,
+      "profile": ["full", "deep"],
+      "source_label": "plan phase mapping(s)",
+      "description": "Every FR should be addressed by at least one plan phase"
+    },
+    "plan.Acceptance": {
+      "source_kind": "ph",
+      "edge_type": "validates",
+      "targets": [
+        "AC-[0-9]{3}"
+      ],
+      "min": 1,
+      "coverage": true,
+      "profile": ["full", "deep"],
+      "source_label": "plan acceptance mapping(s)",
+      "description": "Every AC should map to at least one plan phase acceptance entry"
+    },
+    "task.Implements": {
+      "source_kind": "task",
+      "edge_type": "implements",
+      "targets": [
+        "FR-[0-9]{3}"
+      ],
+      "min": 1,
+      "coverage": true,
+      "source_label": "implementing task(s)",
+      "description": "Every FR should be implemented by at least one task"
+    },
+    "review.Validates": {
+      "source_kind": "artifact",
+      "source_artifact_type": "review",
+      "edge_type": "validates",
+      "targets": [
+        "AC-[0-9]{3}"
+      ],
+      "min": 1,
+      "coverage": true,
+      "source_label": "review validation row(s)",
+      "description": "Every AC should have at least one review validation row"
+    },
+    "task.Depends-on": {
+      "source_kind": "task",
+      "edge_type": "depends_on",
+      "targets": [
+        "T-[0-9]{3}",
+        "WP-[0-9]{2}/T-[0-9]{2,3}"
+      ],
+      "acyclic": true,
+      "coverage": false,
+      "description": "Task dependencies must be acyclic"
+    }
+  }
+}

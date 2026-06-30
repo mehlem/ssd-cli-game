@@ -1,0 +1,339 @@
+{
+  "hooks": {
+    "InstructionsLoaded": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-instructions-loaded.sh",
+            "timeout": 5,
+            "statusMessage": "Tracking SDD instruction reloads"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "auto|manual",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-postcompact.sh",
+            "timeout": 10,
+            "statusMessage": "Restoring SDD context"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-cache-refresh.sh",
+            "timeout": 30,
+            "async": true,
+            "statusMessage": "Refreshing SDD cache"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "if": "Edit(**/.features/EPIC.md)|Write(**/.features/EPIC.md)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-epic-refresh.sh",
+            "timeout": 15,
+            "async": true,
+            "statusMessage": "Refreshing SDD epic state"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(**/.features/**/brief.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Write(**/.features/**/brief.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/.features/**/spec.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Write(**/.features/**/spec.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/.features/**/research.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Write(**/.features/**/research.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/.features/**/plan.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Write(**/.features/**/plan.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/.features/**/review.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          },
+          {
+            "type": "command",
+            "if": "Write(**/.features/**/review.md)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-postauthoring.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — post-authoring check"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-posttool-failure.sh",
+            "timeout": 5,
+            "statusMessage": "Capturing SDD failure context"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "auto|manual",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-precompact.sh",
+            "timeout": 10,
+            "statusMessage": "Saving SDD state before compaction"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-agent-guard.sh",
+            "timeout": 5,
+            "statusMessage": "Checking SDD agent dispatch"
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-phase-skill-latch.sh",
+            "timeout": 5,
+            "statusMessage": "Recording SDD phase skill"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-phase-skill-gate.sh",
+            "timeout": 5,
+            "statusMessage": "Checking SDD phase skill"
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-scope-drift.sh",
+            "timeout": 5,
+            "statusMessage": "Checking SDD scope"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-phase-skill-gate.sh",
+            "timeout": 5,
+            "statusMessage": "Checking SDD phase skill"
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-phase-skill-latch.sh",
+            "timeout": 5,
+            "statusMessage": "Checking SDD phase skill"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sdd spec *)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-preboundary.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — pre-boundary check"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sdd research *)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-preboundary.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — pre-boundary check"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sdd plan create *)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-preboundary.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — pre-boundary check"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sdd plan tasks *)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-preboundary.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — pre-boundary check"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sdd close *)",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-advisor-preboundary.sh",
+            "timeout": 60,
+            "statusMessage": "SDD Rubric Advisor — pre-boundary check"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-session-end.sh",
+            "timeout": 15,
+            "statusMessage": "Finalizing SDD session state"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-hook.sh",
+            "timeout": 10,
+            "statusMessage": "Loading SDD context"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-stop-gate.sh",
+            "timeout": 10,
+            "statusMessage": "Checking SDD completion"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "sdd-implementer|sdd-spec-reviewer|sdd-quality-reviewer|sdd-research-scout|sdd-plan-drafter",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-subagent-start.sh",
+            "timeout": 5,
+            "statusMessage": "Injecting SDD dispatch packet"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "sdd-implementer|sdd-spec-reviewer|sdd-quality-reviewer|sdd-research-scout|sdd-plan-drafter",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-subagent-stop.sh",
+            "timeout": 10,
+            "statusMessage": "Validating SDD worker result"
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "matcher": "sdd-brief|sdd-spec|sdd-research|sdd-plan|sdd-implement|sdd-review|sdd-close",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-phase-skill-latch.sh",
+            "timeout": 5,
+            "statusMessage": "Recording SDD phase skill"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}\"/.claude/skills/spec-driven-development/scripts/sdd-hook.sh",
+            "timeout": 10,
+            "statusMessage": "Refreshing SDD context"
+          }
+        ]
+      }
+    ]
+  }
+}
