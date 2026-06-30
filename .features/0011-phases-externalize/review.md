@@ -20,6 +20,8 @@ related:
   knowledge: KB-0011
 verdict: pass
 tags: []
+close_commit: 1b4d14e19946c12cbcd0ec8c2e8314466a16e15c
+closed_at: 2026-06-30
 ---
 
 # Review: PHASES-Daten in externe JSON-Datei auslagern
