@@ -83,6 +83,10 @@
     <li><a href="#0005-score-basierter-ausgang">0005 — Score-basierter Ausgang</a></li>
     <li><a href="#0006-projekt-rename">0006 — Projekt-Umbenennung</a></li>
     <li><a href="#0007-zweites-frageset-shuffle">0007 — Zweites Frageset + Shuffle</a></li>
+    <li><a href="#0008-intro-ux-verbesserung">0008 — Intro UX Verbesserung</a></li>
+    <li><a href="#0009-loading-animation-fix">0009 — Loading-Animation Fix</a></li>
+    <li><a href="#0010-projekt-dokumentation">0010 — Projektdokumentation</a></li>
+    <li><a href="#0011-phases-externalize">0011 — PHASES-Externalisierung</a></li>
   </ul>
 </nav>
 <main>
@@ -91,7 +95,7 @@
     <p>
       Dieses Dokument zeigt wie das SDD CLI Game selbst mit
       <strong>Spec-Driven Development (SDD)</strong> entwickelt wurde.
-      Jedes der Features durchlief die vollständige Artifact-Chain:
+      Jedes der 11 Features durchlief die vollständige Artifact-Chain:
     </p>
     <div class="artifact-grid">
       <div class="artifact-badge">brief.md<br><small>WHY</small></div>
@@ -323,7 +327,7 @@ Eine spezifische Frage in der Brief- oder Design-Phase thematisiert den Vorteil 
   <h2>0006 — Projekt-Umbenennung <span class="verdict-pass">✓ PASS</span></h2>
   <div class="block">
     <h3>Problem</h3>
-    <p><code>game.py</code> nennt das Beispielprojekt an 6 Stellen "SmartFlow" bzw. "smart-flow". In der Einleitung heißt das Projekt bereits "PromptAndPray good vibes". Die Inkonsistenz verwirrt Spieler.</p>
+    <p><code>game.py</code> nennt das Beispielprojekt an 6 Stellen "SmartFlow" bzw. "smart-flow". In der Einleitung heißt das Projekt bereits "PromptAndPray good vibes 2.0". Die Inkonsistenz verwirrt Spieler.</p>
   </div>
   <div class="block">
     <h3>Lösung</h3>
@@ -389,6 +393,156 @@ Eine spezifische Frage in der Brief- oder Design-Phase thematisiert den Vorteil 
       <tr><td><code>T-002</code></td><td>run_phase() auf fragen-Liste umstellen + Shuffle einbauen</td><td class="status-done">completed</td></tr>
     </table>
   </div>
+</section>
+<section class="feature" id="0008-intro-ux-verbesserung">
+  <h2>0008 — Intro UX Verbesserung <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Das Spiel zeigt beim Start das ASCII-Art Banner für 4 Sekunden ohne jede Rückmeldung — der Spieler weiß nicht ob etwas lädt. Die Titelseite hat keinen Exit-Hinweis. An allen anderen Stellen fehlt ebenfalls die Möglichkeit, das Spiel geordnet zu beenden.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Drei Verbesserungen: (1) Unter dem ASCII-Art Banner erscheint eine animierte "loading..."-Zeile mit wachsenden Punkten. (2) Auf der Titelseite lautet der Pause-Text "[ Enter drücken um zu starten ] [x für Ende]". (3) An allen anderen Pause-Stellen erscheint zusätzlich "[x für Ende]" — drückt der Spieler x, wird das Spiel beendet.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Während das ASCII-Art Banner angezeigt wird, erscheint unter dem Bild eine animierte Zeile "loading." → "loading.." → "loading..." die sich wiederholt, bis die 4 Sekunden abgelaufen sind.</li>
+      <li>FR-002: Auf der Titelseite lautet der Pause-Text "[ Enter drücken um zu starten ] [x für Ende]".</li>
+      <li>FR-003: An allen anderen Pause-Stellen erscheint der Text "[ Enter drücken um fortzufahren ] [x für Ende]".</li>
+      <li>FR-004: Drückt der Spieler x (an einer beliebigen Pause-Stelle), wird das Spiel sofort beendet.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Nach dem Start erscheint unterhalb des Banners eine animierte Zeile mit "loading" und wachsenden Punkten.</li>
+      <li><span class="ac-icon">○</span> AC-002: <code>inspect.getsource(show_intro)</code> enthält den String "zu starten" für die Titelseiten-Pause.</li>
+      <li><span class="ac-icon">○</span> AC-003: <code>inspect.getsource(pause)</code> enthält "[x für Ende]" im Standard-Pausetext.</li>
+      <li><span class="ac-icon">○</span> AC-004: <code>inspect.getsource(pause)</code> enthält einen sys.exit-Aufruf für Eingabe "x".</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>Loading-Animation unter ASCII-Art Banner</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>Exit-Option in pause() + Titelseiten-Text</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0009-loading-animation-fix">
+  <h2>0009 — Loading-Animation Fix <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Die Loading-Animation zeigt maximal 3 Punkte (loop durch '.', '..', '...') unabhängig von der Anzeigedauer. Der Cursor blinkt sichtbar nach den Punkten. Die Farbe ist grau statt blau.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Die Animation läuft zeitbasiert (~4 Sekunden) mit einem Punkt der sich pro 0,33s verlängert — ergibt ~12 Punkte. Der Cursor wird während der Animation ausgeblendet. Die Schrift ist blau (BLAU-Konstante).</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: Punkte wachsen kontinuierlich über 3 hinaus für die gesamte Anzeigedauer.</li>
+      <li>FR-002: Kein Cursor sichtbar während der Animation.</li>
+      <li>FR-003: Animationstext ist blau gefärbt.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: <code>inspect.getsource(show_intro)</code> enthält <code>\033[?25l</code> (Cursor verbergen).</li>
+      <li><span class="ac-icon">○</span> AC-002: <code>inspect.getsource(show_intro)</code> enthält <code>BLAU</code> im Loading-Block.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>Loading-Animation verbessern</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0010-projekt-dokumentation">
+  <h2>0010 — Projektdokumentation <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Das Spiel hat keine Verlinkung auf die SDD-Projektdokumentation. Spieler und Entwickler sehen nicht, wie das Spiel selbst mit SDD entwickelt wurde.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Ein Python-Script <code>generate_docs.py</code> liest alle .features/0001-0009/ Artefakte und generiert <code>dokumentation.html</code>. Die Abschlussseite des Spiels erhält einen erklärenden Text zu SDD-Artefakten und eine Einladung, <code>dokumentation.html</code> zu öffnen.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: <code>generate_docs.py</code> liest alle 9 Features und generiert <code>dokumentation.html</code>.</li>
+      <li>FR-002: <code>dokumentation.html</code> enthält pro Feature: Titel, Beschreibung, Spec-ACs und Review-Verdict.</li>
+      <li>FR-003: <code>show_summary()</code> zeigt nach dem Score-Panel einen Text zu SDD-Artefakten und den Dateinamen <code>dokumentation.html</code>.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: <code>generate_docs.py</code> existiert und ist ausführbar — <code>py generate_docs.py</code> erzeugt <code>dokumentation.html</code>.</li>
+      <li><span class="ac-icon">○</span> AC-002: <code>dokumentation.html</code> enthält mindestens 9 Feature-Namen.</li>
+      <li><span class="ac-icon">○</span> AC-003: <code>inspect.getsource(show_summary)</code> enthält "dokumentation.html".</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>generate_docs.py erstellen und dokumentation.html generieren</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>Abschlussseite um Dokumentationshinweis erweitern</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0011-phases-externalize">
+  <h2>0011 — PHASES-Externalisierung <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Die <code>PHASES</code>-Liste in <code>game.py</code> umfasst ~450 Zeilen fest eingebetteten Spielinhalt
+(7 Phasen mit je Fragen, Feedback-Texten und Rollenbeispielen). Inhalt erweitern oder
+korrigieren erfordert Python-Syntax-Kenntnis und Bearbeitung der Quelldatei. Content-Pflege
+und Programm-Logik sind unnötig verflochten.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Die <code>PHASES</code>-Liste wird in eine externe Datei <code>phases.json</code> (UTF-8) neben <code>game.py</code>
+ausgelagert. <code>game.py</code> lädt die Daten beim Start per <code>json.load()</code> aus dieser Datei.
+Fehlt die Datei, bricht das Spiel mit einer klaren Fehlermeldung ab. Das Verhalten des
+Spiels ändert sich für den Spieler nicht.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: <code>game.py</code> lädt die Phasendaten aus <code>phases.json</code> im selben Verzeichnis.</li>
+      <li>FR-002: Fehlt <code>phases.json</code> beim Start, gibt das Spiel eine verständliche Fehlermeldung</li>
+      <li>FR-003: <code>phases.json</code> enthält alle 7 Phasen mit identischer Struktur wie der bisherige</li>
+      <li>FR-004: <code>game.py</code> enthält nach dem Umbau keinen <code>PHASES = [...]</code>-Literal mehr.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: Gegeben <code>phases.json</code> existiert korrekt, wenn <code>py game.py</code> gestartet wird,</li>
+      <li><span class="ac-icon">○</span> AC-002: Gegeben <code>phases.json</code> fehlt, wenn <code>py game.py</code> gestartet wird, dann</li>
+      <li><span class="ac-icon">○</span> AC-003: Gegeben der Text einer Frage in <code>phases.json</code> wird geändert, wenn</li>
+      <li><span class="ac-icon">○</span> AC-004: <code>game.py</code> enthält nach dem Umbau keinen <code>PHASES = [...]</code>-Literal mehr</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>phases.json aus PHASES-Literal erzeugen</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>PHASES-Loader in game.py einbauen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+
   <div style="margin-top:3rem;padding:1.75rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;">
     <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:.75rem;">Weiterführende Dokumentation</div>
     <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">Für jedes der 11 Features wurden README.md (narrative Übersicht) und DOCS.md (technische Referenz) mit dem SDD-Archivist generiert.</p>

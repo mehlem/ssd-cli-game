@@ -19,6 +19,8 @@ FEATURE_IDS = [
     "0007-zweites-frageset-shuffle",
     "0008-intro-ux-verbesserung",
     "0009-loading-animation-fix",
+    "0010-projekt-dokumentation",
+    "0011-phases-externalize",
 ]
 
 FEATURE_LABELS = {
@@ -31,6 +33,8 @@ FEATURE_LABELS = {
     "0007-zweites-frageset-shuffle":   "0007 — Zweites Frageset + Shuffle",
     "0008-intro-ux-verbesserung":      "0008 — Intro UX Verbesserung",
     "0009-loading-animation-fix":      "0009 — Loading-Animation Fix",
+    "0010-projekt-dokumentation":      "0010 — Projektdokumentation",
+    "0011-phases-externalize":         "0011 — PHASES-Externalisierung",
 }
 
 
@@ -255,7 +259,7 @@ def build_html(features_html):
     <p>
       Dieses Dokument zeigt wie das SDD CLI Game selbst mit
       <strong>Spec-Driven Development (SDD)</strong> entwickelt wurde.
-      Jedes der 9 Features durchlief die vollständige Artifact-Chain:
+      Jedes der 11 Features durchlief die vollständige Artifact-Chain:
     </p>
     <div class="artifact-grid">
       <div class="artifact-badge">brief.md<br><small>WHY</small></div>
