@@ -251,7 +251,10 @@ def build_html(features_html):
   <h1>SDD CLI Game</h1>
   <ul>
     <li><a href="#intro">Einführung</a></li>
-{nav_items}  </ul>
+{nav_items}    <li style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">
+      <a href="README_DOCS.html" style="color:var(--accent2);">&#128196; README &amp; DOCS</a>
+    </li>
+  </ul>
 </nav>
 <main>
   <div class="intro" id="intro">
