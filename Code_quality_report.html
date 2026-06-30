@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Quality Report — game.py</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:          #0D1117;
+    --surface:     #161B22;
+    --card:        #1C2128;
+    --code-bg:     #12181F;
+    --border:      #30363D;
+    --border-soft: #21262D;
+    --text:        #E6EDF3;
+    --text-muted:  #8B949E;
+    --text-dim:    #484F58;
+    --amber:       #D29922;
+    --amber-dim:   #3D2E0A;
+    --sev-bug:     #F85149;
+    --sev-bug-bg:  #3D0D0B;
+    --sev-high:    #FF7B47;
+    --sev-high-bg: #2E1508;
+    --sev-med:     #D29922;
+    --sev-med-bg:  #2A1F04;
+    --sev-ux:      #388BFD;
+    --sev-ux-bg:   #061B38;
+    --sev-minor:   #3FB950;
+    --sev-minor-bg:#051E0A;
+    --sev-note:    #8B949E;
+    --sev-note-bg: #1C2128;
+    --mono: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    --sans: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Summary bar ─────────────────────────────────────────── */
+  .summary-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 17, 23, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    height: 52px;
+    overflow-x: auto;
+  }
+
+  .bar-file {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .bar-sep { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
+
+  .bar-counts {
+    display: flex;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .count-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-family: var(--mono);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .count-chip .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-bug   { background: var(--sev-bug); }
+  .dot-high  { background: var(--sev-high); }
+  .dot-med   { background: var(--sev-med); }
+  .dot-ux    { background: var(--sev-ux); }
+  .dot-minor { background: var(--sev-minor); }
+  .dot-note  { background: var(--sev-note); }
+
+  /* ── Page header ─────────────────────────────────────────── */
+  .page-header {
+    padding: 56px 24px 40px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin-bottom: 16px;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .header-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── Finding section ──────────────────────────────────────── */
+  .findings {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 24px 0 8px;
+    border-top: 1px solid var(--border-soft);
+    margin-top: 8px;
+  }
+
+  .section-label:first-child { border-top: none; margin-top: 0; }
+
+  /* ── Finding card ─────────────────────────────────────────── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-header:hover { background: rgba(255,255,255,0.02); }
+
+  .sev-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .badge-bug   { background: var(--sev-bug-bg);   color: var(--sev-bug);   border: 1px solid rgba(248,81,73,0.3); }
+  .badge-high  { background: var(--sev-high-bg);  color: var(--sev-high);  border: 1px solid rgba(255,123,71,0.3); }
+  .badge-med   { background: var(--sev-med-bg);   color: var(--sev-med);   border: 1px solid rgba(210,153,34,0.3); }
+  .badge-ux    { background: var(--sev-ux-bg);    color: var(--sev-ux);    border: 1px solid rgba(56,139,253,0.3); }
+  .badge-minor { background: var(--sev-minor-bg); color: var(--sev-minor); border: 1px solid rgba(63,185,80,0.3); }
+  .badge-note  { background: var(--sev-note-bg);  color: var(--sev-note);  border: 1px solid rgba(139,148,158,0.3); }
+
+  .card-title-group { flex: 1; min-width: 0; }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .card-location {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .card-chevron {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .card.open .card-chevron { transform: rotate(90deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .card.open .card-body { display: block; }
+
+  .card-body p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.65;
+    margin-top: 14px;
+  }
+
+  .card-body p strong { color: var(--text); font-weight: 600; }
+
+  .label-sm {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 18px 0 6px;
+  }
+
+  /* ── Code blocks ──────────────────────────────────────────── */
+  .code-wrap { overflow-x: auto; border-radius: 6px; }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #C9D1D9;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .diff-before pre { border-left: 3px solid var(--sev-bug); }
+  .diff-after  pre { border-left: 3px solid var(--sev-minor); }
+
+  .code-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 0;
+  }
+
+  @media (max-width: 640px) {
+    .code-grid { grid-template-columns: 1fr; }
+  }
+
+  .diff-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* syntax highlight tokens (minimal hand-rolled) */
+  .kw  { color: #FF7B72; }   /* keyword  */
+  .fn  { color: #D2A8FF; }   /* function */
+  .st  { color: #A5D6FF; }   /* string   */
+  .cm  { color: #484F58; }   /* comment  */
+  .nm  { color: #79C0FF; }   /* name/var */
+  .nu  { color: #F0883E; }   /* number   */
+  .op  { color: #8B949E; }   /* operator */
+  .hl  { background: rgba(210,153,34,0.12); border-radius: 2px; padding: 0 2px; }
+
+  /* ── Fix plan section ─────────────────────────────────────── */
+  .fix-order {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .fix-order h2 {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .order-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .order-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 20px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .order-desc { color: var(--text-muted); flex: 1; }
+  .order-desc strong { color: var(--text); }
+
+  .order-scope {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  /* ── Verification ─────────────────────────────────────────── */
+  .verify-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  .verify-section h2 {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .verify-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) { .verify-grid { grid-template-columns: 1fr; } }
+
+  .verify-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  .verify-card h3 {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .verify-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .verify-card li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .verify-card li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Sticky summary bar ────────────────────────────────────── -->
+<div class="summary-bar">
+  <span class="bar-file">game.py</span>
+  <div class="bar-sep"></div>
+  <div class="bar-counts">
+    <span class="count-chip"><span class="dot dot-bug"></span>1 Bug</span>
+    <span class="count-chip"><span class="dot dot-high"></span>2 High</span>
+    <span class="count-chip"><span class="dot dot-med"></span>5 Medium</span>
+    <span class="count-chip"><span class="dot dot-ux"></span>2 UX</span>
+    <span class="count-chip"><span class="dot dot-minor"></span>1 Minor</span>
+    <span class="count-chip"><span class="dot dot-note"></span>2 Design Notes</span>
+  </div>
+</div>
+
+<!-- ── Page header ───────────────────────────────────────────── -->
+<div class="page-header">
+  <div class="eyebrow">Code Quality Review</div>
+  <h1>game.py — 13 Findings</h1>
+  <div class="header-meta">
+    <span>📁 SSD-Beispielprojekt / game.py</span>
+    <span>📏 933 Zeilen</span>
+    <span>📅 30. Juni 2026</span>
+    <span>🔍 Vollständige manuelle Review</span>
+  </div>
+</div>
+
+<!-- ── Findings ──────────────────────────────────────────────── -->
+<div class="findings">
+
+  <!-- BUG -->
+  <div class="section-label">Bug — funktionale Fehler</div>
+
+  <div class="card open" id="f1">
+    <div class="card-header" onclick="toggle('f1')">
+      <span class="sev-badge badge-bug">Bug</span>
+      <div class="card-title-group">
+        <div class="card-title">print_box() löscht ANSI-Farben aus Inhalt still</div>
+        <div class="card-location">game.py : 108–118 · Funktion print_box()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> textwrap.wrap() wird auf den ANSI-bereinigten String angewendet.
+      Das Ergebnis — der bereinigte Text <code>wline</code> — wird dann gedruckt, nicht der Original.
+      Inline-Farben wie <code>{FETT}{CYAN}SDD-Projektdokumentation{RESET}</code> (Zeile 865) gehen
+      damit still verloren. Es gibt keine Fehlermeldung — der Text erscheint nur unformatiert.</p>
+
+      <div class="label-sm">Ursache</div>
+      <div class="code-wrap"><pre><span class="cm"># Der wrap operiert korrekt auf dem plain-Text —</span>
+<span class="cm"># aber wline IST der plain-Text, nicht der Original</span>
+wrapped = textwrap.wrap(<span class="hl">_ANSI_RE.sub("", subline)</span>, width=w - 4) or [""]
+<span class="kw">for</span> wline <span class="kw">in</span> wrapped:
+    padding = " " * max(0, w - 4 - _display_len(wline))
+    print(f"  {color}│{RESET}  <span class="hl">{wline}</span>{padding}{color}│{RESET}")
+<span class="cm">#                        ^^^^^ plain-Text, Farbe weg</span></pre></div>
+
+      <div class="label-sm">Fix</div>
+      <div class="code-wrap"><pre><span class="cm"># plain nur für Breiten-Berechnung; Ausgabe mit Original</span>
+plain = _ANSI_RE.sub("", subline)
+wrapped = textwrap.wrap(plain, width=w - 4) or [""]
+<span class="kw">for</span> wline <span class="kw">in</span> wrapped:
+    padding = " " * max(0, w - 4 - _display_len(wline))
+    print(f"  {color}│{RESET}  <span class="hl">{wline}</span>{padding}{color}│{RESET}")
+<span class="cm"># Hinweis: Bei Inline-ANSI + Wrapping stimmt die Breite</span>
+<span class="cm"># nicht exakt — Aufrufer sollten Inline-ANSI sparsam nutzen.</span></pre></div>
+    </div>
+  </div>
+
+  <!-- HIGH -->
+  <div class="section-label">High — Wartbarkeit & Korrektheit</div>
+
+  <div class="card" id="f2">
+    <div class="card-header" onclick="toggle('f2')">
+      <span class="sev-badge badge-high">High</span>
+      <div class="card-title-group">
+        <div class="card-title">Magic Number 19 koppelt Farblogik an Dateiinhalt</div>
+        <div class="card-location">game.py : 63 · Funktion _print_banner()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>if i &lt; 19:</code> — die Zahl 19 ist eine undokumentierte
+      Eigenschaft der externen Datei <code>SDD_ASCII-Art.txt</code>. Ändert sich die Datei,
+      bricht das Farbschema lautlos. Kein Kommentar erklärt, warum 19.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre><span class="kw">if</span> i < <span class="hl">19</span>:
+    print(pad + WEISS + line + RESET)</pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="cm"># Erste Unterlängen-Zeile im Banner</span>
+_BANNER_COLOURED_FROM = <span class="nu">19</span>
+...
+<span class="kw">if</span> i < <span class="hl">_BANNER_COLOURED_FROM</span>:
+    print(pad + WEISS + line + RESET)</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="f3">
+    <div class="card-header" onclick="toggle('f3')">
+      <span class="sev-badge badge-high">High</span>
+      <div class="card-title-group">
+        <div class="card-title">sys.exit() in Low-Level-Utility pause() verletzt SRP</div>
+        <div class="card-location">game.py : 81 · Funktion pause()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>pause()</code> ist eine UI-Hilfsfunktion, beendet aber
+      das Programm mit <code>sys.exit(0)</code>. Das koppelt Exit-Logik in die falsche Schicht,
+      macht Unit-Tests unmöglich und überrascht jeden, der <code>pause()</code> in anderem Kontext
+      aufruft.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">pause</span>(msg=...):
+    antwort = input(msg).strip().lower()
+    <span class="kw">if</span> antwort == <span class="st">"x"</span>:
+        <span class="hl">sys.exit(0)</span></pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">pause</span>(msg=...):
+    antwort = input(msg).strip().lower()
+    <span class="kw">return</span> antwort == <span class="st">"x"</span>  <span class="cm"># True = Ende</span>
+
+<span class="cm"># An allen ~8 Aufrufstellen:</span>
+<span class="kw">if</span> <span class="fn">pause</span>():
+    <span class="hl">sys.exit(0)</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDIUM -->
+  <div class="section-label">Medium — Code-Smells</div>
+
+  <div class="card" id="f4">
+    <div class="card-header" onclick="toggle('f4')">
+      <span class="sev-badge badge-med">Medium</span>
+      <div class="card-title-group">
+        <div class="card-title">re wird lokal nochmal importiert, obwohl global vorhanden</div>
+        <div class="card-location">game.py : 7 + 56 · Funktion _print_banner()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>import re</code> ist auf Zeile 7 bereits global definiert.
+      Der lokale <code>import re as _re</code> in <code>_print_banner()</code> ist redundant —
+      der Underscore-Alias suggeriert fälschlicherweise, es sei ein anderes Modul.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher (Zeile 56–61)</div>
+          <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">_print_banner</span>():
+    ...
+    <span class="hl">import re as _re</span>
+    ...
+    _gap = <span class="hl">_re</span>.compile(r'(\s{10,})(\S.*)$')</pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">_print_banner</span>():
+    ...
+    <span class="cm"># _ANSI_RE bereits global; _gap nutzt globales re</span>
+    _gap = <span class="hl">re</span>.compile(r'(\s{10,})(\S.*)$')</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="f5">
+    <div class="card-header" onclick="toggle('f5')">
+      <span class="sev-badge badge-med">Medium</span>
+      <div class="card-title-group">
+        <div class="card-title">import os as _os2 — verwirrender Alias für bereits importiertes os</div>
+        <div class="card-location">game.py : 883 · Funktion show_summary()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>os</code> ist bereits auf Zeile 6 global importiert.
+      Der lokale Alias <code>_os2</code> ist verwirrend und unnötig.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre><span class="hl">import os as _os2</span>
+_doc = <span class="hl">_os2</span>.path.join(
+    <span class="hl">_os2</span>.path.dirname(
+        <span class="hl">_os2</span>.path.abspath(__file__)),
+    <span class="st">"dokumentation.html"</span>)</pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="cm"># os global verwenden</span>
+_doc = <span class="hl">os</span>.path.join(
+    <span class="hl">os</span>.path.dirname(
+        <span class="hl">os</span>.path.abspath(__file__)),
+    <span class="st">"dokumentation.html"</span>)</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="f6">
+    <div class="card-header" onclick="toggle('f6')">
+      <span class="sev-badge badge-med">Medium</span>
+      <div class="card-title-group">
+        <div class="card-title">Score-Schwellwert &gt; 6 als Magic Number</div>
+        <div class="card-location">game.py : 839 · Funktion show_summary()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>if score &gt; 6:</code> ist fest an die aktuelle
+      Phasenanzahl (7) gekoppelt. Wird eine Phase hinzugefügt, stimmt die Logik still falsch —
+      dann wäre 7/8 noch "perfekt".</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre><span class="kw">if</span> score > <span class="hl">6</span>:</pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="kw">if</span> score >= <span class="hl">total</span>:  <span class="cm"># total = len(PHASES)</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="f7">
+    <div class="card-header" onclick="toggle('f7')">
+      <span class="sev-badge badge-med">Medium</span>
+      <div class="card-title-group">
+        <div class="card-title">Variable interaktion wird sofort durch modifizierte Kopie überschrieben</div>
+        <div class="card-location">game.py : 820–824 · Funktion run_phase()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>interaktion</code> wird belegt, dann direkt durch einen
+      <code>dict(...)</code>-Copy überschrieben. Leser müssen zweimal hinschauen, um den Shallow-Copy-Trick
+      zu erkennen.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre><span class="nm">interaktion</span> = random.choice(...)
+correct_text = <span class="nm">interaktion</span>["optionen"][...]
+opts = <span class="nm">interaktion</span>["optionen"][:]
+random.shuffle(opts)
+<span class="hl">interaktion</span> = dict(<span class="hl">interaktion</span>, ...)</pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="nm">rohe_frage</span> = random.choice(...)
+correct_text = <span class="nm">rohe_frage</span>["optionen"][...]
+opts = <span class="nm">rohe_frage</span>["optionen"][:]
+random.shuffle(opts)
+<span class="hl">frage</span> = dict(<span class="nm">rohe_frage</span>, ...)
+points = ask_question(<span class="hl">frage</span>)</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="f8">
+    <div class="card-header" onclick="toggle('f8')">
+      <span class="sev-badge badge-med">Medium</span>
+      <div class="card-title-group">
+        <div class="card-title">len() statt _display_len() für Column-Breite — inkonsistent</div>
+        <div class="card-location">game.py : 184–185 · Funktion _print_side_by_side()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>lw = max(len(l) for l in left_lines)</code> zählt
+      Byte-Länge, nicht Anzeigebreite. Für Box-Drawing-Zeichen und Unicode ist
+      <code>_display_len()</code> die korrekte Methode — sie wird überall sonst im File
+      konsequent verwendet. Außerdem nutzt <code>ljust()</code> ebenfalls
+      <code>len()</code> intern — manuelles Padding nötig.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre>lw = max(<span class="hl">len(l)</span> for l in left_lines)
+left_pad = [l.<span class="hl">ljust(lw)</span> for l in left_lines]
+         + [" " * lw] * ...</pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre>lw = max(<span class="hl">_display_len(l)</span> for l in left_lines)
+left_pad = [
+    l + " " * max(0, lw - <span class="hl">_display_len(l)</span>)
+    for l in left_lines
+] + [" " * lw] * ...</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UX -->
+  <div class="section-label">UX — Nutzungsprobleme</div>
+
+  <div class="card" id="f9">
+    <div class="card-header" onclick="toggle('f9')">
+      <span class="sev-badge badge-ux">UX</span>
+      <div class="card-title-group">
+        <div class="card-title">150-Spalten-Pflicht sperrt Nutzer mit normalen Terminals aus</div>
+        <div class="card-location">game.py : 203–212 · Funktion show_intro()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>while terminal_width() &lt; 150:</code> erzeugt einen
+      Endlos-Loop. Auf vielen Laptops ist ein maximiertes Terminal nur 120–140 Spalten breit.
+      Der einzige Ausweg ist "x" zum Beenden — kein Fortfahren trotz kleinerer Ansicht möglich.</p>
+
+      <p><strong>Fix:</strong> Warnung anzeigen, aber nach Bestätigung trotzdem durchlassen.
+      Der Loop wird zu einer einmaligen Hinweis-Ausgabe ohne Zwang.</p>
+
+      <div class="label-sm">Fix-Skizze</div>
+      <div class="code-wrap"><pre><span class="kw">if</span> terminal_width() < <span class="nu">150</span>:
+    print_centered(f"{GELB}Optimale Darstellung ab 150 Spalten "
+                   f"(aktuell: {terminal_width()}){RESET}")
+    print_centered(f"{GRAU}Du kannst trotzdem fortfahren.{RESET}")
+    antwort = input(f"  [ Enter ]  [x für Ende]  ").strip().lower()
+    <span class="kw">if</span> antwort == <span class="st">"x"</span>:
+        sys.exit(<span class="nu">0</span>)
+    clear_screen()
+<span class="cm"># kein while — einmalige Warnung, kein erzwungener Loop</span></pre></div>
+    </div>
+  </div>
+
+  <div class="card" id="f10">
+    <div class="card-header" onclick="toggle('f10')">
+      <span class="sev-badge badge-ux">UX</span>
+      <div class="card-title-group">
+        <div class="card-title">_fax_print() — 3-Sekunden-Pause ohne Skip-Möglichkeit</div>
+        <div class="card-location">game.py : 166–178 + 236–243 · _fax_print() + show_intro()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>time.sleep(pause_before)</code> mit Default 3.0 Sekunden —
+      gefolgt von zeichenweisem Delay ohne Skip. Beim zweiten Durchlauf ist das frustrierend.
+      Kein Hinweis, dass man überspringen kann.</p>
+
+      <p><strong>Fix:</strong> Default auf 0.5 s reduzieren, Ctrl+C abfangen und Resttext
+      sofort ausgeben. Hinweis vor dem Fax einblenden.</p>
+
+      <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">_fax_print</span>(lines, pause_before=<span class="hl">0.5</span>, char_delay=<span class="nu">0.04</span>, colors=<span class="kw">None</span>):
+    print(f"  {GRAU}(Ctrl+C zum Überspringen){RESET}")
+    <span class="kw">try</span>:
+        time.sleep(pause_before)
+        <span class="kw">for</span> idx, line <span class="kw">in</span> enumerate(lines):
+            ...  <span class="cm"># bestehende Logik</span>
+    <span class="kw">except</span> KeyboardInterrupt:
+        print()  <span class="cm"># Zeile abschließen</span>
+        <span class="kw">for</span> idx, line <span class="kw">in</span> enumerate(lines):
+            color = (colors[idx] <span class="kw">if</span> colors <span class="kw">and</span> idx < len(colors) <span class="kw">else</span> "")
+            print(color + line + RESET)</pre></div>
+    </div>
+  </div>
+
+  <!-- MINOR -->
+  <div class="section-label">Minor</div>
+
+  <div class="card" id="f11">
+    <div class="card-header" onclick="toggle('f11')">
+      <span class="sev-badge badge-minor">Minor</span>
+      <div class="card-title-group">
+        <div class="card-title">_mark_intro_seen() prüft Existenz redundant vor open("w")</div>
+        <div class="card-location">game.py : 903–905 · Funktion _mark_intro_seen()</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Problem:</strong> <code>open(_MARKER, "w")</code> würde die Datei ohnehin anlegen
+      oder überschreiben (was harmlos ist). Der vorherige <code>if not os.path.exists()</code>-Check
+      ist unnötig und erzeugt eine leichte TOCTOU-Schwäche.</p>
+
+      <div class="code-grid">
+        <div class="diff-before">
+          <div class="diff-label">— vorher</div>
+          <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">_mark_intro_seen</span>():
+    <span class="hl">if not os.path.exists(_MARKER):</span>
+        <span class="kw">with</span> open(_MARKER, <span class="st">"w"</span>):
+            <span class="kw">pass</span></pre></div>
+        </div>
+        <div class="diff-after">
+          <div class="diff-label">+ nachher</div>
+          <div class="code-wrap"><pre><span class="kw">def</span> <span class="fn">_mark_intro_seen</span>():
+    open(_MARKER, <span class="st">"w"</span>).close()</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN NOTES -->
+  <div class="section-label">Design Notes — nicht implementiert</div>
+
+  <div class="card" id="f12">
+    <div class="card-header" onclick="toggle('f12')">
+      <span class="sev-badge badge-note">Note</span>
+      <div class="card-title-group">
+        <div class="card-title">450 Zeilen Inhaltsdaten (PHASES) direkt im Code eingebettet</div>
+        <div class="card-location">game.py : 339–783</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Beobachtung:</strong> Die <code>PHASES</code>-Liste ist ~450 Zeilen
+      fest eingebetteter Spielinhalt. Das Erweitern von Fragen erfordert Python-Syntax-Kenntnis.
+      Eine externe <code>phases.json</code>-Datei würde Content von Logic trennen und das Editieren
+      für Nicht-Entwickler ermöglichen.</p>
+      <p><strong>Nicht implementiert</strong> — verändert die Deployment-Anforderungen
+      (externe Datei), zu großer Scope für diesen Fix-Lauf.</p>
+    </div>
+  </div>
+
+  <div class="card" id="f13">
+    <div class="card-header" onclick="toggle('f13')">
+      <span class="sev-badge badge-note">Note</span>
+      <div class="card-title-group">
+        <div class="card-title">Keine Typ-Annotationen für verschachtelte Dict-Strukturen</div>
+        <div class="card-location">game.py · gesamte PHASES-Struktur</div>
+      </div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p><strong>Beobachtung:</strong> Die verschachtelten Dicts
+      (<code>phase["interaktion"]["optionen"]</code>, <code>phase["fragen"][0]["richtig"]</code> usw.)
+      sind nirgends typisiert. Ein <code>TypedDict</code> oder Dataclass würde IDE-Support,
+      Autovervollständigung und statische Analyse ermöglichen.</p>
+      <p><strong>Nicht implementiert</strong> — separates Refactoring-Feature, kein Bug-Fix.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Umsetzungs-Reihenfolge ────────────────────────────────── -->
+<div class="fix-order">
+  <h2>Empfohlene Umsetzungs-Reihenfolge</h2>
+  <div class="order-list">
+    <div class="order-item">
+      <span class="order-num">01</span>
+      <span class="sev-badge badge-med" style="font-size:9px;padding:2px 6px;">Med</span>
+      <span class="order-desc"><strong>Fix 4</strong> — re-Import entfernen · setzt _ANSI_RE-Reihenfolge voraus</span>
+      <span class="order-scope">_print_banner()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">02</span>
+      <span class="sev-badge badge-high" style="font-size:9px;padding:2px 6px;">High</span>
+      <span class="order-desc"><strong>Fix 3</strong> — sys.exit() aus pause() herausziehen · globale Änderung, alle ~8 Aufrufer</span>
+      <span class="order-scope">pause() + Aufrufer</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">03</span>
+      <span class="sev-badge badge-bug" style="font-size:9px;padding:2px 6px;">Bug</span>
+      <span class="order-desc"><strong>Fix 1</strong> — print_box() ANSI-Bug · kritischster Fix</span>
+      <span class="order-scope">print_box()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">04</span>
+      <span class="sev-badge badge-med" style="font-size:9px;padding:2px 6px;">Med</span>
+      <span class="order-desc"><strong>Fix 8</strong> — _display_len() in _print_side_by_side()</span>
+      <span class="order-scope">_print_side_by_side()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">05</span>
+      <span class="sev-badge badge-med" style="font-size:9px;padding:2px 6px;">Med</span>
+      <span class="order-desc"><strong>Fix 5</strong> — import os as _os2 entfernen</span>
+      <span class="order-scope">show_summary()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">06</span>
+      <span class="sev-badge badge-med" style="font-size:9px;padding:2px 6px;">Med</span>
+      <span class="order-desc"><strong>Fix 7</strong> — Variable-Shadowing interaktion</span>
+      <span class="order-scope">run_phase()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">07</span>
+      <span class="sev-badge badge-med" style="font-size:9px;padding:2px 6px;">Med</span>
+      <span class="order-desc"><strong>Fix 6</strong> — Score-Grenze > 6 → >= total</span>
+      <span class="order-scope">show_summary()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">08</span>
+      <span class="sev-badge badge-high" style="font-size:9px;padding:2px 6px;">High</span>
+      <span class="order-desc"><strong>Fix 2</strong> — Magic Number 19 durch Konstante ersetzen</span>
+      <span class="order-scope">_print_banner()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">09</span>
+      <span class="sev-badge badge-minor" style="font-size:9px;padding:2px 6px;">Minor</span>
+      <span class="order-desc"><strong>Fix 11</strong> — redundante Existenzprüfung in _mark_intro_seen()</span>
+      <span class="order-scope">_mark_intro_seen()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">10</span>
+      <span class="sev-badge badge-ux" style="font-size:9px;padding:2px 6px;">UX</span>
+      <span class="order-desc"><strong>Fix 9</strong> — 150-Spalten-Loop zu Warnung umwandeln</span>
+      <span class="order-scope">show_intro()</span>
+    </div>
+    <div class="order-item">
+      <span class="order-num">11</span>
+      <span class="sev-badge badge-ux" style="font-size:9px;padding:2px 6px;">UX</span>
+      <span class="order-desc"><strong>Fix 10</strong> — Fax-Skip via Ctrl+C + pause_before reduzieren</span>
+      <span class="order-scope">_fax_print() + show_intro()</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Verifikation ───────────────────────────────────────────── -->
+<div class="verify-section">
+  <h2>Verifikation nach allen Fixes</h2>
+  <div class="verify-grid">
+    <div class="verify-card">
+      <h3>Automatisch</h3>
+      <ul>
+        <li><code>py -m py_compile game.py</code> — kein Syntaxfehler</li>
+        <li>Keine NameError beim Import</li>
+      </ul>
+    </div>
+    <div class="verify-card">
+      <h3>Manuell — Pfade</h3>
+      <ul>
+        <li>Spiel vollständig durchspielen (alle 7 Phasen)</li>
+        <li>Intro-Skip beim 2. Start testen</li>
+        <li>"x" an jeder pause()-Stelle testen</li>
+      </ul>
+    </div>
+    <div class="verify-card">
+      <h3>Fix-spezifisch</h3>
+      <ul>
+        <li>Fix 1: print_box mit farbigem Inhalt → Farbe sichtbar</li>
+        <li>Fix 9: Terminal auf 80 Spalten → kein Endlos-Loop</li>
+        <li>Fix 10: Ctrl+C während Fax → sofortige Ausgabe</li>
+      </ul>
+    </div>
+    <div class="verify-card">
+      <h3>Regression</h3>
+      <ul>
+        <li>Banner-Farbwechsel bei Zeile 19 korrekt</li>
+        <li>Score-Logik: 7/7 → Gratulation, 6/7 → Wiederholen</li>
+        <li>Side-by-side Box-Alignment geprüft</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggle(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

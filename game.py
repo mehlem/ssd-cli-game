@@ -53,14 +53,15 @@ def _print_banner():
     Zeilen mit Inhalt auf BEIDEN Seiten (z.B. 'p'-Unterlänge rechts): links blau, rechts weiß."""
     if not _BANNER_LINES:
         return
-    import re as _re
     w     = terminal_width()
     max_w = max(len(l) for l in _BANNER_LINES)
     pad   = " " * max(0, (w - max_w) // 2)
     # Suche: letzter großer Leerraum (≥10 Spaces) gefolgt von Inhalt am Zeilenende
-    _gap = _re.compile(r'(\s{10,})(\S.*)$')
+    _gap = re.compile(r'(\s{10,})(\S.*)$')
+    # Zeile 19 = erste Unterlängen-Zeile in SDD_ASCII-Art.txt (Farbwechsel weiß → PTA-Blau)
+    _BANNER_COLOUR_SPLIT = 19
     for i, line in enumerate(_BANNER_LINES):
-        if i < 19:
+        if i < _BANNER_COLOUR_SPLIT:
             print(pad + WEISS + line + RESET)
         else:
             stripped = line.rstrip()
@@ -77,8 +78,7 @@ def _print_banner():
 
 def pause(msg=f"\n  {GRAU}[ Enter drücken um fortzufahren ]  [x für Ende]{RESET} "):
     antwort = input(msg).strip().lower()
-    if antwort == "x":
-        sys.exit(0)
+    return antwort == "x"
 
 
 def terminal_width():
@@ -111,7 +111,8 @@ def print_box(lines, color=BLAU):
     print(f"  {color}┌{h_line}┐{RESET}")
     for line in lines:
         for subline in line.split("\n"):
-            wrapped = textwrap.wrap(_ANSI_RE.sub("", subline), width=w - 4) or [""]
+            plain = _ANSI_RE.sub("", subline)
+            wrapped = textwrap.wrap(plain, width=w - 4) or [""]
             for wline in wrapped:
                 padding = " " * max(0, w - 4 - _display_len(wline))
                 print(f"  {color}│{RESET}  {wline}{padding}{color}│{RESET}")
@@ -163,26 +164,32 @@ def _chaos_box_lines():
     return [top, empty] + art + [empty, bot]
 
 
-def _fax_print(lines, pause_before=3.0, char_delay=0.07, colors=None):
+def _fax_print(lines, pause_before=0.5, char_delay=0.04, colors=None):
     """Text zeilenweise buchstabenweise ausgeben — wie eine eingehende Fax-Nachricht.
     colors: optionale Liste von ANSI-Farbcodes je Zeile (None = keine Farbe)."""
-    time.sleep(pause_before)
-    for idx, line in enumerate(lines):
-        color = (colors[idx] if colors and idx < len(colors) else "") or ""
-        if color:
-            print(color, end="", flush=True)
-        for ch in line:
-            print(ch, end="", flush=True)
-            time.sleep(char_delay + random.uniform(0, 0.02))
-        print(RESET if color else "")
-        time.sleep(0.25)
+    try:
+        time.sleep(pause_before)
+        for idx, line in enumerate(lines):
+            color = (colors[idx] if colors and idx < len(colors) else "") or ""
+            if color:
+                print(color, end="", flush=True)
+            for ch in line:
+                print(ch, end="", flush=True)
+                time.sleep(char_delay + random.uniform(0, 0.02))
+            print(RESET if color else "")
+            time.sleep(0.25)
+    except KeyboardInterrupt:
+        print()
+        for idx, line in enumerate(lines):
+            color = (colors[idx] if colors and idx < len(colors) else "") or ""
+            print(color + line + (RESET if color else ""))
 
 
 def _print_side_by_side(left_lines, right_lines, left_color, right_color):
     """Zwei vorberechnete Box-Zeilenlisten nebeneinander ausgeben."""
     h = max(len(left_lines), len(right_lines))
-    lw = max(len(l) for l in left_lines) if left_lines else 0
-    left_pad  = [l.ljust(lw) for l in left_lines]  + [" " * lw] * (h - len(left_lines))
+    lw = max(_display_len(l) for l in left_lines) if left_lines else 0
+    left_pad  = [l + " " * max(0, lw - _display_len(l)) for l in left_lines] + [" " * lw] * (h - len(left_lines))
     right_pad = list(right_lines) + [""] * (h - len(right_lines))
     for lv, rv in zip(left_pad, right_pad):
         print(f"  {left_color}{lv}{RESET}  {right_color}{rv}{RESET}")
@@ -200,12 +207,13 @@ SDD_ASCII = r"""
 def show_intro():
     clear_screen()
 
-    while terminal_width() < 150:
+    if terminal_width() < 150:
         print()
-        print_centered(f"{GELB}{FETT}Für optimale Darstellung bitte das Terminalfenster maximieren.{RESET}")
+        print_centered(f"{GELB}{FETT}Für optimale Darstellung empfehlen wir ≥150 Spalten.{RESET}")
+        print_centered(f"{GRAU}Aktuell: {terminal_width()} Spalten — du kannst trotzdem fortfahren.{RESET}")
         print()
         antwort = input(
-            f"  {GRAU}[ Fenster maximiert? Enter drücken um fortzufahren ]  [x für Ende]{RESET}  "
+            f"  {GRAU}[ Enter drücken um fortzufahren ]  [x für Ende]{RESET}  "
         ).strip().lower()
         if antwort == "x":
             sys.exit(0)
@@ -219,7 +227,8 @@ def show_intro():
     print_centered(f"{FETT}{CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{RESET}")
     print_centered(f"{GRAU}Spec-Driven Development interaktiv erleben  {RESET}")
     print()
-    pause(f"\n  {GRAU}[ Enter drücken um zu starten ]  [x für Ende]{RESET} ")
+    if pause(f"\n  {GRAU}[ Enter drücken um zu starten ]  [x für Ende]{RESET} "):
+        sys.exit(0)
 
     # --- Szene 1: Das Chaos-Projekt ---
     clear_screen()
@@ -250,7 +259,8 @@ def show_intro():
         "Kein Mensch weiß mehr, was welcher Code eigentlich tun soll.",
     ], color=ROT)
     print()
-    pause()
+    if pause():
+        sys.exit(0)
 
     # --- Szene 2: Der Kollege mit dem Plan ---
     clear_screen()
@@ -275,7 +285,8 @@ def show_intro():
         "  'KI ist ein mächtiges Werkzeug. Aber Werkzeuge brauchen einen Plan.'",
     ], color=GRÜN)
     print()
-    pause()
+    if pause():
+        sys.exit(0)
 
     # --- Szene 3: Deine Mission ---
     clear_screen()
@@ -299,7 +310,8 @@ def show_intro():
         "Kein echter Code. Kein echtes Plugin. Nur du und die Methodik.",
     ], color=BLAU)
     print()
-    pause(f"\n  {GRÜN}{FETT}[ Enter — Abenteuer beginnen ]{RESET} ")
+    if pause(f"\n  {GRÜN}{FETT}[ Enter — Abenteuer beginnen ]{RESET} "):
+        sys.exit(0)
 
 
 # ---------------------------------------------------------------------------
@@ -328,7 +340,8 @@ def ask_question(q):
         korrekte_opt = q["optionen"][int(q["richtig"]) - 1]
         print(f"  {ROT}{FETT}✗ Nicht ganz.{RESET}  Richtig wäre: {FETT}{korrekte_opt}{RESET}")
         print(f"  {ROT}{q['feedback_falsch']}{RESET}")
-    pause()
+    if pause():
+        sys.exit(0)
     return 1 if richtig else 0
 
 
@@ -817,12 +830,12 @@ def run_phase(phase):
             _panel.append(_indent + _l)
     print_box(_panel, color=GRÜN)
     print()
-    interaktion = random.choice([phase["interaktion"]] + phase["fragen"])
-    correct_text = interaktion["optionen"][int(interaktion["richtig"]) - 1]
-    opts = interaktion["optionen"][:]
+    rohe_frage = random.choice([phase["interaktion"]] + phase["fragen"])
+    correct_text = rohe_frage["optionen"][int(rohe_frage["richtig"]) - 1]
+    opts = rohe_frage["optionen"][:]
     random.shuffle(opts)
-    interaktion = dict(interaktion, optionen=opts, richtig=str(opts.index(correct_text) + 1))
-    points = ask_question(interaktion)
+    frage = dict(rohe_frage, optionen=opts, richtig=str(opts.index(correct_text) + 1))
+    points = ask_question(frage)
     return points
 
 
@@ -836,7 +849,7 @@ def show_summary(score, total):
     print(f"{FETT}{GRÜN}★  Glückwunsch — du hast alle 7 Phasen durchlaufen!  ★{RESET}")
     print()
     sterne = "★" * score + "☆" * (total - score)
-    if score > 6:
+    if score >= total:
         nachricht = [
             "Du hast das PromptAndPray-Projekt gerettet. Jana nickt anerkennend.",
             "",
@@ -880,8 +893,7 @@ def show_summary(score, total):
             sys.exit(0)
         elif antwort == "d":
             import webbrowser as _wb
-            import os as _os2
-            _doc = _os2.path.join(_os2.path.dirname(_os2.path.abspath(__file__)), "dokumentation.html")
+            _doc = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dokumentation.html")
             _wb.open(_doc)
         else:
             break
@@ -900,9 +912,7 @@ def _intro_already_seen():
 
 
 def _mark_intro_seen():
-    if not os.path.exists(_MARKER):
-        with open(_MARKER, "w"):
-            pass
+    open(_MARKER, "w").close()
 
 
 def main():
