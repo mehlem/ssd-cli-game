@@ -74,7 +74,7 @@ footer{margin-top:3rem;padding:1.5rem 0;border-top:1px solid var(--border);
 <nav>
   <div class="nav-title">Feature-Dokumentation</div>
   <ul>
-<li><a href="#0001-sdd-cli-game">0001 SDD CLI Game</a></li><li><a href="#0002-sdd-cli-game-interactive">0002 Interaktive Engine</a></li><li><a href="#0003-game-phase-examples">0003 Phasen-Beispiele</a></li><li><a href="#0004-frage-headline">0004 Frage-Headline</a></li><li><a href="#0005-score-basierter-ausgang">0005 Score-Ausgang</a></li><li><a href="#0006-projekt-rename">0006 Projekt-Rename</a></li><li><a href="#0007-zweites-frageset-shuffle">0007 Fragenset-Shuffle</a></li><li><a href="#0008-intro-ux-verbesserung">0008 Intro UX</a></li><li><a href="#0009-loading-animation-fix">0009 Animation-Fix</a></li><li><a href="#0010-projekt-dokumentation">0010 Projektdokumentation</a></li><li><a href="#0011-phases-externalize">0011 PHASES-Externalisierung</a></li>
+<li><a href="#0001-sdd-cli-game">0001 SDD CLI Game</a></li><li><a href="#0002-sdd-cli-game-interactive">0002 Interaktive Engine</a></li><li><a href="#0003-game-phase-examples">0003 Phasen-Beispiele</a></li><li><a href="#0004-frage-headline">0004 Frage-Headline</a></li><li><a href="#0005-score-basierter-ausgang">0005 Score-Ausgang</a></li><li><a href="#0006-projekt-rename">0006 Projekt-Rename</a></li><li><a href="#0007-zweites-frageset-shuffle">0007 Fragenset-Shuffle</a></li><li><a href="#0008-intro-ux-verbesserung">0008 Intro UX</a></li><li><a href="#0009-loading-animation-fix">0009 Animation-Fix</a></li><li><a href="#0010-phases-externalize">0010 PHASES-Externalisierung</a></li><li><a href="#0011-projekt-dokumentation">0011 Projektdokumentation</a></li>
   </ul>
 </nav>
 <main>
@@ -1700,152 +1700,17 @@ py -c &quot;import inspect, game; src = inspect.getsource(game.show_intro); asse
 </ul>
 </div>
 </section>
-<section id="0010-projekt-dokumentation" class="feature-section">
+<section id="0010-phases-externalize" class="feature-section">
   <div class="feature-header">
     <span class="feature-id">0010</span>
-    <h2>Projektdokumentation</h2>
-    <span class="feature-slug">0010-projekt-dokumentation</span>
-  </div>
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(this,'0010-projekt-dokumentation-readme')">README</button>
-    <button class="tab-btn" onclick="switchTab(this,'0010-projekt-dokumentation-docs')">DOCS</button>
-  </div>
-  <div id="0010-projekt-dokumentation-readme" class="tab-content active"><h1 id="projekt-dokumentation">Projekt Dokumentation</h1>
-
-<h2 id="problem">Problem</h2>
-
-<p>Das Spiel besaß keine sichtbare Verbindung zu seiner eigenen Entstehungsgeschichte. Spieler und Entwickler konnten nicht nachvollziehen, dass das Spiel mit SDD (Spec-Driven Development) entwickelt wurde und welche Artefakte dabei entstanden sind. Die neun abgeschlossenen Features (0001–0009) lagen als strukturierte Artefakte vor, waren aber nicht zugänglich aufbereitet.</p>
-
-<h2 id="solution">Solution</h2>
-
-<p>Es wurden zwei Dinge gebaut: ein Python-Script <code>generate_docs.py</code>, das alle neun Feature-Verzeichnisse unter <code>.features/</code> liest und daraus eine gestylte <code>dokumentation.html</code> erzeugt, sowie eine Erweiterung von <code>show_summary()</code> in <code>game.py</code>, die auf der Abschlussseite des Spiels einen erklärenden Text zu SDD-Artefakten und einen Hinweis auf <code>dokumentation.html</code> einblendet.</p>
-
-<p>Alle drei Acceptance Criteria wurden mit PASS bewertet. Das Feature ist abgeschlossen (Verdict: pass).</p>
-
-<h2 id="key-decisions">Key Decisions</h2>
-
-<p><strong>Python stdlib only, kein Markdown-Parser.</strong> Statt einer Abhängigkeit auf einen externen Markdown-Parser (z.B. <code>markdown</code> oder <code>mistune</code>) wurde direkte Textextraktion aus den Artefakt-Dateien gewählt. Das hält die Ausführungsvoraussetzungen auf Python 3 stdlib beschränkt und vermeidet ein Setup-Problem auf beliebigen Maschinen.</p>
-
-<p><strong>Separate Generierungsdatei statt eingebettetem Code.</strong> Die HTML-Generierung hätte alternativ direkt in <code>game.py</code> integriert werden können (z.B. als Funktion, die beim Spielstart aufgerufen wird). Die Entscheidung fiel auf eine eigenständige Datei <code>generate_docs.py</code>, um <code>game.py</code> nicht mit Build-Logik zu belasten und das Script unabhängig aufrufbar zu halten.</p>
-
-<p><strong>Statische HTML-Datei statt Laufzeit-Rendering.</strong> Anstelle einer dynamischen Anzeige im Spiel (etwa als eingebettetes Browser-Fenster oder Terminal-Ausgabe) wird eine statische <code>dokumentation.html</code> generiert, die der Nutzer separat öffnet. Das hält den Spielcode schlank und macht die Dokumentation auch außerhalb des Spiels zugänglich.</p>
-
-<p><strong>Nur Dateinamen-Hinweis in <code>show_summary()</code>.</strong> Eine vollständige Einbettung der Feature-Übersicht in die Abschlussseite wäre möglich gewesen, würde aber das Score-Panel optisch überladen. Stattdessen zeigt <code>show_summary()</code> nur einen kurzen Text mit dem Dateinamen <code>dokumentation.html</code> als Einladung.</p>
-
-<h2 id="outcome">Outcome</h2>
-
-<p>Alle drei Acceptance Criteria wurden verifiziert:</p>
-
-<ul>
-<li>AC-001 (PASS): <code>py generate_docs.py</code> läuft fehlerfrei und erzeugt <code>dokumentation.html</code>.</li>
-<li>AC-002 (PASS): <code>dokumentation.html</code> enthält alle 9 Feature-Namen (0001–0009), verifiziert per String-Suche.</li>
-<li>AC-003 (PASS): <code>inspect.getsource(game.show_summary)</code> enthält den String <code>&quot;dokumentation.html&quot;</code>.</li>
-</ul>
-
-<p>Keine kritischen oder minoren Issues wurden im Review dokumentiert. Die Prüfung auf hartcodierte Secrets ergab keinen Fund.</p>
-
-<h2 id="lessons-learned">Lessons Learned</h2>
-
-<p>Das scratchpad.md und knowledge.md dieses Features sind weitgehend leer — das Feature wurde im lite-Profil mit zwei klar abgegrenzten Tasks umgesetzt, die keine Kurskorrektur oder dokumentationswürdige Beobachtung erforderten. Das ist konsistent mit dem Scope: zwei neue Dateien, minimale Änderung an einer bestehenden Funktion.</p>
-
-<p>Die Verifikationsstrategie per <code>inspect.getsource()</code> (AC-003) ist ein nützliches Muster, um das Vorhandensein eines bestimmten Strings in einer Python-Funktion ohne externes Test-Framework zu prüfen.</p>
-
-<h2 id="further-reading">Further Reading</h2>
-
-<ul>
-<li><a href="DOCS.md">DOCS.md</a> — Technische Referenz: Komponenten, Interface-Änderungen, Verifikationsbefehle</li>
-<li><a href="spec.md">spec.md</a> — Problem, Solution, funktionale Anforderungen und Acceptance Criteria</li>
-<li><a href="tasks.md">tasks.md</a> — Aufgabenstruktur, Scope Boundaries, Verifikationsbefehle</li>
-<li><a href="review.md">review.md</a> — AC-Validierungstabelle, Verdict, Issues-Log</li>
-<li><a href="scratchpad.md">scratchpad.md</a> — Arbeitsnotizen (weitgehend leer; lite-Profil)</li>
-<li><a href="knowledge.md">knowledge.md</a> — Dauerhafte Erkenntnisse (weitgehend leer; lite-Profil)</li>
-</ul>
-</div>
-  <div id="0010-projekt-dokumentation-docs"   class="tab-content"><h1 id="technical-reference-projekt-dokumentation">Technical Reference: Projekt Dokumentation</h1>
-
-<h2 id="architecture-overview">Architecture Overview</h2>
-
-<p>Das Feature besteht aus zwei unabhängig nutzbaren Teilen:</p>
-
-<p>1. <strong>Offline-Generator</strong> (<code>generate_docs.py</code>): Liest <code>.features/0001-&lt;em&gt;/</code> bis <code>.features/0009-&lt;/em&gt;/</code> per stdlib-Dateioperationen und schreibt eine einzelne, selbst enthaltene <code>dokumentation.html</code>. Kein Webserver, keine Laufzeit-Abhängigkeit.</p>
-
-<p>2. <strong>In-Game-Hinweis</strong> (<code>game.py</code>, Funktion <code>show_summary()</code>): Zeigt nach dem Score-Panel einen statischen Text, der den Nutzer auf <code>dokumentation.html</code> hinweist. Keine Laufzeitkopplung an den Generator — der HTML-Hinweis ist ein hartcodierter String.</p>
-
-<p>Die beiden Teile sind absichtlich entkoppelt: <code>generate_docs.py</code> kann ohne laufendes Spiel ausgeführt werden, und <code>game.py</code> referenziert <code>dokumentation.html</code> nur namentlich, ohne die Datei zu erzeugen oder zu öffnen.</p>
-
-<h2 id="components-files">Components & Files</h2>
-
-<table>
-<tr><th>File</th><th>Action</th><th>Purpose</th></tr>
-<tr><td><code>generate_docs.py</code></td><td>Created</td><td>Liest alle 9 Feature-Verzeichnisse und schreibt <code>dokumentation.html</code>; Python 3 stdlib only</td></tr>
-<tr><td><code>game.py</code></td><td>Modified</td><td><code>show_summary()</code> erweitert um SDD-Erklärungstext und Dateinamen-Hinweis</td></tr>
-<tr><td><code>dokumentation.html</code></td><td>Generated</td><td>Ausgabe von <code>generate_docs.py</code>; enthält Titel, Beschreibung, Spec-ACs und Review-Verdict je Feature</td></tr>
-</table>
-
-<p>Hinweis: <code>dokumentation.html</code> ist ein Artefakt des Generators, keine versionierte Quelldatei.</p>
-
-<h2 id="interface-changes">Interface Changes</h2>
-
-<p><strong>Neuer Befehl:</strong></p>
-<pre><code class="lang-">
-py generate_docs.py
-</code></pre>
-<p>Erzeugt <code>dokumentation.html</code> im Projektverzeichnis. Keine Argumente. Schlägt fehl, wenn <code>.features/0001-&lt;em&gt;/</code> bis <code>.features/0009-&lt;/em&gt;/</code> nicht vorhanden sind.</p>
-
-<p><strong>Geänderte Funktion:</strong></p>
-<pre><code class="lang-">
-game.show_summary()
-</code></pre>
-<p>Zeigt nach dem Score-Panel zusätzlich einen Abschnitt mit SDD-Kontext und dem String <code>&quot;dokumentation.html&quot;</code>. Die Funktion hat keine neue Signatur und keine neuen Parameter.</p>
-
-<h2 id="testing-verification">Testing & Verification</h2>
-
-<p>Beide Tasks haben explizite Verifikationsbefehle, die im Review als PASS bestätigt wurden.</p>
-
-<p><strong>AC-001 + AC-002 — Generator erzeugt vollständige HTML:</strong></p>
-<pre><code class="lang-bash">
-cd &quot;&lt;projektpfad&gt;&quot; &amp;&amp; py generate_docs.py &amp;&amp; py -c &quot;content = open(&#x27;dokumentation.html&#x27;, encoding=&#x27;utf-8&#x27;).read(); count = sum(1 for f in [&#x27;0001&#x27;,&#x27;0002&#x27;,&#x27;0003&#x27;,&#x27;0004&#x27;,&#x27;0005&#x27;,&#x27;0006&#x27;,&#x27;0007&#x27;,&#x27;0008&#x27;,&#x27;0009&#x27;] if f in content); assert count &gt;= 9, f&#x27;Nur {count}/9 Features&#x27;; print(f&#x27;OK - {count}/9 Features in dokumentation.html&#x27;)&quot;
-</code></pre>
-<p>Erwartete Ausgabe: <code>OK - 9/9 Features in dokumentation.html</code></p>
-
-<p><strong>AC-003 — <code>show_summary()</code> enthält Dateinamen-Hinweis:</strong></p>
-<pre><code class="lang-bash">
-py -c &quot;import inspect, game; src = inspect.getsource(game.show_summary); assert &#x27;dokumentation.html&#x27; in src, &#x27;FAIL&#x27;; print(&#x27;OK&#x27;)&quot;
-</code></pre>
-<p>Erwartete Ausgabe: <code>OK</code></p>
-
-<p>Kein eigenständiges Test-Framework. Verifikation erfolgt direkt per Python-Einzeiler.</p>
-
-<h2 id="known-limitations">Known Limitations</h2>
-
-<ul>
-<li><code>dokumentation.html</code> wird nicht automatisch bei Spielstart aktualisiert. Wenn neue Features zu <code>.features/</code> hinzukommen, muss <code>generate_docs.py</code> manuell neu ausgeführt werden.</li>
-<li>Der Generator ist auf genau 9 Feature-Verzeichnisse (0001–0009) ausgelegt. Erweiterbarkeit auf mehr Features ist nicht spezifiziert.</li>
-<li>Die Code-Quality-Tabelle im review.md ist nicht ausgefüllt (Felder für Correctness, Tests, Security etc. enthalten <code>—</code>). Limited information available über die interne Qualitätsbewertung.</li>
-<li>Es existiert kein research.md für dieses Feature (lite-Profil). Die Scope-Conformance-Tabelle im review.md verweist deshalb auf <code>(no research.md found)</code>.</li>
-</ul>
-
-<h2 id="further-reading">Further Reading</h2>
-
-<ul>
-<li><a href="README.md">README.md</a> — Narrative Übersicht: Problem, Entscheidungen, Outcome</li>
-<li><a href="spec.md">spec.md</a> — Funktionale Anforderungen (FR-001–003) und Acceptance Criteria (AC-001–003)</li>
-<li><a href="tasks.md">tasks.md</a> — Task-Breakdown mit Scope Boundaries und Verifikationsbefehlen</li>
-<li><a href="review.md">review.md</a> — AC-Validierungstabelle und Verdict (pass)</li>
-</ul>
-</div>
-</section>
-<section id="0011-phases-externalize" class="feature-section">
-  <div class="feature-header">
-    <span class="feature-id">0011</span>
     <h2>PHASES-Externalisierung</h2>
-    <span class="feature-slug">0011-phases-externalize</span>
+    <span class="feature-slug">0010-phases-externalize</span>
   </div>
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(this,'0011-phases-externalize-readme')">README</button>
-    <button class="tab-btn" onclick="switchTab(this,'0011-phases-externalize-docs')">DOCS</button>
+    <button class="tab-btn active" onclick="switchTab(this,'0010-phases-externalize-readme')">README</button>
+    <button class="tab-btn" onclick="switchTab(this,'0010-phases-externalize-docs')">DOCS</button>
   </div>
-  <div id="0011-phases-externalize-readme" class="tab-content active"><h1 id="phases-daten-in-externe-json-datei-auslagern">PHASES-Daten in externe JSON-Datei auslagern</h1>
+  <div id="0010-phases-externalize-readme" class="tab-content active"><h1 id="phases-daten-in-externe-json-datei-auslagern">PHASES-Daten in externe JSON-Datei auslagern</h1>
 
 <h2 id="problem">Problem</h2>
 
@@ -1939,7 +1804,7 @@ py -c &quot;import inspect, game; src = inspect.getsource(game.show_summary); as
 <li><a href="knowledge.md">knowledge.md</a> — Drei graduierte Erkenntnisse (K-001 AST, K-002 F-String, K-003 JSONDecodeError)</li>
 </ul>
 </div>
-  <div id="0011-phases-externalize-docs"   class="tab-content"><h1 id="technical-reference-phases-daten-in-externe-json-datei-auslagern">Technical Reference: PHASES-Daten in externe JSON-Datei auslagern</h1>
+  <div id="0010-phases-externalize-docs"   class="tab-content"><h1 id="technical-reference-phases-daten-in-externe-json-datei-auslagern">Technical Reference: PHASES-Daten in externe JSON-Datei auslagern</h1>
 
 <h2 id="architecture-overview">Architecture Overview</h2>
 
@@ -2121,6 +1986,141 @@ except json.JSONDecodeError as e:
 <li><a href="review.md">review.md</a> — AC-Validierung, Code-Quality-Tabelle, Adjudication, Scope-Conformance</li>
 <li><a href="knowledge.md">knowledge.md</a> — Graduierte Erkenntnisse K-001 bis K-003</li>
 <li><a href="scratchpad.md">scratchpad.md</a> — Rohnotizen zur Implementierung (AST, F-String-Fehler, scope-refresh)</li>
+</ul>
+</div>
+</section>
+<section id="0011-projekt-dokumentation" class="feature-section">
+  <div class="feature-header">
+    <span class="feature-id">0011</span>
+    <h2>Projektdokumentation</h2>
+    <span class="feature-slug">0011-projekt-dokumentation</span>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'0011-projekt-dokumentation-readme')">README</button>
+    <button class="tab-btn" onclick="switchTab(this,'0011-projekt-dokumentation-docs')">DOCS</button>
+  </div>
+  <div id="0011-projekt-dokumentation-readme" class="tab-content active"><h1 id="projekt-dokumentation">Projekt Dokumentation</h1>
+
+<h2 id="problem">Problem</h2>
+
+<p>Das Spiel besaß keine sichtbare Verbindung zu seiner eigenen Entstehungsgeschichte. Spieler und Entwickler konnten nicht nachvollziehen, dass das Spiel mit SDD (Spec-Driven Development) entwickelt wurde und welche Artefakte dabei entstanden sind. Die neun abgeschlossenen Features (0001–0009) lagen als strukturierte Artefakte vor, waren aber nicht zugänglich aufbereitet.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>Es wurden zwei Dinge gebaut: ein Python-Script <code>generate_docs.py</code>, das alle neun Feature-Verzeichnisse unter <code>.features/</code> liest und daraus eine gestylte <code>dokumentation.html</code> erzeugt, sowie eine Erweiterung von <code>show_summary()</code> in <code>game.py</code>, die auf der Abschlussseite des Spiels einen erklärenden Text zu SDD-Artefakten und einen Hinweis auf <code>dokumentation.html</code> einblendet.</p>
+
+<p>Alle drei Acceptance Criteria wurden mit PASS bewertet. Das Feature ist abgeschlossen (Verdict: pass).</p>
+
+<h2 id="key-decisions">Key Decisions</h2>
+
+<p><strong>Python stdlib only, kein Markdown-Parser.</strong> Statt einer Abhängigkeit auf einen externen Markdown-Parser (z.B. <code>markdown</code> oder <code>mistune</code>) wurde direkte Textextraktion aus den Artefakt-Dateien gewählt. Das hält die Ausführungsvoraussetzungen auf Python 3 stdlib beschränkt und vermeidet ein Setup-Problem auf beliebigen Maschinen.</p>
+
+<p><strong>Separate Generierungsdatei statt eingebettetem Code.</strong> Die HTML-Generierung hätte alternativ direkt in <code>game.py</code> integriert werden können (z.B. als Funktion, die beim Spielstart aufgerufen wird). Die Entscheidung fiel auf eine eigenständige Datei <code>generate_docs.py</code>, um <code>game.py</code> nicht mit Build-Logik zu belasten und das Script unabhängig aufrufbar zu halten.</p>
+
+<p><strong>Statische HTML-Datei statt Laufzeit-Rendering.</strong> Anstelle einer dynamischen Anzeige im Spiel (etwa als eingebettetes Browser-Fenster oder Terminal-Ausgabe) wird eine statische <code>dokumentation.html</code> generiert, die der Nutzer separat öffnet. Das hält den Spielcode schlank und macht die Dokumentation auch außerhalb des Spiels zugänglich.</p>
+
+<p><strong>Nur Dateinamen-Hinweis in <code>show_summary()</code>.</strong> Eine vollständige Einbettung der Feature-Übersicht in die Abschlussseite wäre möglich gewesen, würde aber das Score-Panel optisch überladen. Stattdessen zeigt <code>show_summary()</code> nur einen kurzen Text mit dem Dateinamen <code>dokumentation.html</code> als Einladung.</p>
+
+<h2 id="outcome">Outcome</h2>
+
+<p>Alle drei Acceptance Criteria wurden verifiziert:</p>
+
+<ul>
+<li>AC-001 (PASS): <code>py generate_docs.py</code> läuft fehlerfrei und erzeugt <code>dokumentation.html</code>.</li>
+<li>AC-002 (PASS): <code>dokumentation.html</code> enthält alle 9 Feature-Namen (0001–0009), verifiziert per String-Suche.</li>
+<li>AC-003 (PASS): <code>inspect.getsource(game.show_summary)</code> enthält den String <code>&quot;dokumentation.html&quot;</code>.</li>
+</ul>
+
+<p>Keine kritischen oder minoren Issues wurden im Review dokumentiert. Die Prüfung auf hartcodierte Secrets ergab keinen Fund.</p>
+
+<h2 id="lessons-learned">Lessons Learned</h2>
+
+<p>Das scratchpad.md und knowledge.md dieses Features sind weitgehend leer — das Feature wurde im lite-Profil mit zwei klar abgegrenzten Tasks umgesetzt, die keine Kurskorrektur oder dokumentationswürdige Beobachtung erforderten. Das ist konsistent mit dem Scope: zwei neue Dateien, minimale Änderung an einer bestehenden Funktion.</p>
+
+<p>Die Verifikationsstrategie per <code>inspect.getsource()</code> (AC-003) ist ein nützliches Muster, um das Vorhandensein eines bestimmten Strings in einer Python-Funktion ohne externes Test-Framework zu prüfen.</p>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<ul>
+<li><a href="DOCS.md">DOCS.md</a> — Technische Referenz: Komponenten, Interface-Änderungen, Verifikationsbefehle</li>
+<li><a href="spec.md">spec.md</a> — Problem, Solution, funktionale Anforderungen und Acceptance Criteria</li>
+<li><a href="tasks.md">tasks.md</a> — Aufgabenstruktur, Scope Boundaries, Verifikationsbefehle</li>
+<li><a href="review.md">review.md</a> — AC-Validierungstabelle, Verdict, Issues-Log</li>
+<li><a href="scratchpad.md">scratchpad.md</a> — Arbeitsnotizen (weitgehend leer; lite-Profil)</li>
+<li><a href="knowledge.md">knowledge.md</a> — Dauerhafte Erkenntnisse (weitgehend leer; lite-Profil)</li>
+</ul>
+</div>
+  <div id="0011-projekt-dokumentation-docs"   class="tab-content"><h1 id="technical-reference-projekt-dokumentation">Technical Reference: Projekt Dokumentation</h1>
+
+<h2 id="architecture-overview">Architecture Overview</h2>
+
+<p>Das Feature besteht aus zwei unabhängig nutzbaren Teilen:</p>
+
+<p>1. <strong>Offline-Generator</strong> (<code>generate_docs.py</code>): Liest <code>.features/0001-&lt;em&gt;/</code> bis <code>.features/0009-&lt;/em&gt;/</code> per stdlib-Dateioperationen und schreibt eine einzelne, selbst enthaltene <code>dokumentation.html</code>. Kein Webserver, keine Laufzeit-Abhängigkeit.</p>
+
+<p>2. <strong>In-Game-Hinweis</strong> (<code>game.py</code>, Funktion <code>show_summary()</code>): Zeigt nach dem Score-Panel einen statischen Text, der den Nutzer auf <code>dokumentation.html</code> hinweist. Keine Laufzeitkopplung an den Generator — der HTML-Hinweis ist ein hartcodierter String.</p>
+
+<p>Die beiden Teile sind absichtlich entkoppelt: <code>generate_docs.py</code> kann ohne laufendes Spiel ausgeführt werden, und <code>game.py</code> referenziert <code>dokumentation.html</code> nur namentlich, ohne die Datei zu erzeugen oder zu öffnen.</p>
+
+<h2 id="components-files">Components & Files</h2>
+
+<table>
+<tr><th>File</th><th>Action</th><th>Purpose</th></tr>
+<tr><td><code>generate_docs.py</code></td><td>Created</td><td>Liest alle 9 Feature-Verzeichnisse und schreibt <code>dokumentation.html</code>; Python 3 stdlib only</td></tr>
+<tr><td><code>game.py</code></td><td>Modified</td><td><code>show_summary()</code> erweitert um SDD-Erklärungstext und Dateinamen-Hinweis</td></tr>
+<tr><td><code>dokumentation.html</code></td><td>Generated</td><td>Ausgabe von <code>generate_docs.py</code>; enthält Titel, Beschreibung, Spec-ACs und Review-Verdict je Feature</td></tr>
+</table>
+
+<p>Hinweis: <code>dokumentation.html</code> ist ein Artefakt des Generators, keine versionierte Quelldatei.</p>
+
+<h2 id="interface-changes">Interface Changes</h2>
+
+<p><strong>Neuer Befehl:</strong></p>
+<pre><code class="lang-">
+py generate_docs.py
+</code></pre>
+<p>Erzeugt <code>dokumentation.html</code> im Projektverzeichnis. Keine Argumente. Schlägt fehl, wenn <code>.features/0001-&lt;em&gt;/</code> bis <code>.features/0009-&lt;/em&gt;/</code> nicht vorhanden sind.</p>
+
+<p><strong>Geänderte Funktion:</strong></p>
+<pre><code class="lang-">
+game.show_summary()
+</code></pre>
+<p>Zeigt nach dem Score-Panel zusätzlich einen Abschnitt mit SDD-Kontext und dem String <code>&quot;dokumentation.html&quot;</code>. Die Funktion hat keine neue Signatur und keine neuen Parameter.</p>
+
+<h2 id="testing-verification">Testing & Verification</h2>
+
+<p>Beide Tasks haben explizite Verifikationsbefehle, die im Review als PASS bestätigt wurden.</p>
+
+<p><strong>AC-001 + AC-002 — Generator erzeugt vollständige HTML:</strong></p>
+<pre><code class="lang-bash">
+cd &quot;&lt;projektpfad&gt;&quot; &amp;&amp; py generate_docs.py &amp;&amp; py -c &quot;content = open(&#x27;dokumentation.html&#x27;, encoding=&#x27;utf-8&#x27;).read(); count = sum(1 for f in [&#x27;0001&#x27;,&#x27;0002&#x27;,&#x27;0003&#x27;,&#x27;0004&#x27;,&#x27;0005&#x27;,&#x27;0006&#x27;,&#x27;0007&#x27;,&#x27;0008&#x27;,&#x27;0009&#x27;] if f in content); assert count &gt;= 9, f&#x27;Nur {count}/9 Features&#x27;; print(f&#x27;OK - {count}/9 Features in dokumentation.html&#x27;)&quot;
+</code></pre>
+<p>Erwartete Ausgabe: <code>OK - 9/9 Features in dokumentation.html</code></p>
+
+<p><strong>AC-003 — <code>show_summary()</code> enthält Dateinamen-Hinweis:</strong></p>
+<pre><code class="lang-bash">
+py -c &quot;import inspect, game; src = inspect.getsource(game.show_summary); assert &#x27;dokumentation.html&#x27; in src, &#x27;FAIL&#x27;; print(&#x27;OK&#x27;)&quot;
+</code></pre>
+<p>Erwartete Ausgabe: <code>OK</code></p>
+
+<p>Kein eigenständiges Test-Framework. Verifikation erfolgt direkt per Python-Einzeiler.</p>
+
+<h2 id="known-limitations">Known Limitations</h2>
+
+<ul>
+<li><code>dokumentation.html</code> wird nicht automatisch bei Spielstart aktualisiert. Wenn neue Features zu <code>.features/</code> hinzukommen, muss <code>generate_docs.py</code> manuell neu ausgeführt werden.</li>
+<li>Der Generator ist auf genau 9 Feature-Verzeichnisse (0001–0009) ausgelegt. Erweiterbarkeit auf mehr Features ist nicht spezifiziert.</li>
+<li>Die Code-Quality-Tabelle im review.md ist nicht ausgefüllt (Felder für Correctness, Tests, Security etc. enthalten <code>—</code>). Limited information available über die interne Qualitätsbewertung.</li>
+<li>Es existiert kein research.md für dieses Feature (lite-Profil). Die Scope-Conformance-Tabelle im review.md verweist deshalb auf <code>(no research.md found)</code>.</li>
+</ul>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<ul>
+<li><a href="README.md">README.md</a> — Narrative Übersicht: Problem, Entscheidungen, Outcome</li>
+<li><a href="spec.md">spec.md</a> — Funktionale Anforderungen (FR-001–003) und Acceptance Criteria (AC-001–003)</li>
+<li><a href="tasks.md">tasks.md</a> — Task-Breakdown mit Scope Boundaries und Verifikationsbefehlen</li>
+<li><a href="review.md">review.md</a> — AC-Validierungstabelle und Verdict (pass)</li>
 </ul>
 </div>
 </section>

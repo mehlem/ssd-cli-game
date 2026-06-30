@@ -19,8 +19,8 @@ FEATURE_IDS = [
     "0007-zweites-frageset-shuffle",
     "0008-intro-ux-verbesserung",
     "0009-loading-animation-fix",
-    "0010-projekt-dokumentation",
-    "0011-phases-externalize",
+    "0010-phases-externalize",
+    "0011-projekt-dokumentation",
 ]
 
 FEATURE_LABELS = {
@@ -33,8 +33,8 @@ FEATURE_LABELS = {
     "0007-zweites-frageset-shuffle":   "0007 — Zweites Frageset + Shuffle",
     "0008-intro-ux-verbesserung":      "0008 — Intro UX Verbesserung",
     "0009-loading-animation-fix":      "0009 — Loading-Animation Fix",
-    "0010-projekt-dokumentation":      "0010 — Projektdokumentation",
-    "0011-phases-externalize":         "0011 — PHASES-Externalisierung",
+    "0010-phases-externalize":         "0010 — PHASES-Externalisierung",
+    "0011-projekt-dokumentation":      "0011 — Projektdokumentation",
 }
 
 

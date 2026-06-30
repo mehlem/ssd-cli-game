@@ -85,8 +85,8 @@
     <li><a href="#0007-zweites-frageset-shuffle">0007 — Zweites Frageset + Shuffle</a></li>
     <li><a href="#0008-intro-ux-verbesserung">0008 — Intro UX Verbesserung</a></li>
     <li><a href="#0009-loading-animation-fix">0009 — Loading-Animation Fix</a></li>
-    <li><a href="#0010-projekt-dokumentation">0010 — Projektdokumentation</a></li>
-    <li><a href="#0011-phases-externalize">0011 — PHASES-Externalisierung</a></li>
+    <li><a href="#0010-phases-externalize">0010 — PHASES-Externalisierung</a></li>
+    <li><a href="#0011-projekt-dokumentation">0011 — Projektdokumentation</a></li>
   </ul>
 </nav>
 <main>
@@ -464,43 +464,8 @@ Eine spezifische Frage in der Brief- oder Design-Phase thematisiert den Vorteil 
     </table>
   </div>
 </section>
-<section class="feature" id="0010-projekt-dokumentation">
-  <h2>0010 — Projektdokumentation <span class="verdict-pass">✓ PASS</span></h2>
-  <div class="block">
-    <h3>Problem</h3>
-    <p>Das Spiel hat keine Verlinkung auf die SDD-Projektdokumentation. Spieler und Entwickler sehen nicht, wie das Spiel selbst mit SDD entwickelt wurde.</p>
-  </div>
-  <div class="block">
-    <h3>Lösung</h3>
-    <p>Ein Python-Script <code>generate_docs.py</code> liest alle .features/0001-0009/ Artefakte und generiert <code>dokumentation.html</code>. Die Abschlussseite des Spiels erhält einen erklärenden Text zu SDD-Artefakten und eine Einladung, <code>dokumentation.html</code> zu öffnen.</p>
-  </div>
-  <div class="block">
-    <h3>Funktionale Anforderungen</h3>
-    <ul>
-      <li>FR-001: <code>generate_docs.py</code> liest alle 9 Features und generiert <code>dokumentation.html</code>.</li>
-      <li>FR-002: <code>dokumentation.html</code> enthält pro Feature: Titel, Beschreibung, Spec-ACs und Review-Verdict.</li>
-      <li>FR-003: <code>show_summary()</code> zeigt nach dem Score-Panel einen Text zu SDD-Artefakten und den Dateinamen <code>dokumentation.html</code>.</li>
-    </ul>
-  </div>
-  <div class="block">
-    <h3>Akzeptanzkriterien</h3>
-    <ul>
-      <li><span class="ac-icon">○</span> AC-001: <code>generate_docs.py</code> existiert und ist ausführbar — <code>py generate_docs.py</code> erzeugt <code>dokumentation.html</code>.</li>
-      <li><span class="ac-icon">○</span> AC-002: <code>dokumentation.html</code> enthält mindestens 9 Feature-Namen.</li>
-      <li><span class="ac-icon">○</span> AC-003: <code>inspect.getsource(show_summary)</code> enthält "dokumentation.html".</li>
-    </ul>
-  </div>
-  <div class="block">
-    <h3>Tasks</h3>
-    <table>
-      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
-      <tr><td><code>T-001</code></td><td>generate_docs.py erstellen und dokumentation.html generieren</td><td class="status-done">completed</td></tr>
-      <tr><td><code>T-002</code></td><td>Abschlussseite um Dokumentationshinweis erweitern</td><td class="status-done">completed</td></tr>
-    </table>
-  </div>
-</section>
-<section class="feature" id="0011-phases-externalize">
-  <h2>0011 — PHASES-Externalisierung <span class="verdict-pass">✓ PASS</span></h2>
+<section class="feature" id="0010-phases-externalize">
+  <h2>0010 — PHASES-Externalisierung <span class="verdict-pass">✓ PASS</span></h2>
   <div class="block">
     <h3>Problem</h3>
     <p>Die <code>PHASES</code>-Liste in <code>game.py</code> umfasst ~450 Zeilen fest eingebetteten Spielinhalt
@@ -539,6 +504,41 @@ Spiels ändert sich für den Spieler nicht.</p>
       <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
       <tr><td><code>T-001</code></td><td>phases.json aus PHASES-Literal erzeugen</td><td class="status-done">completed</td></tr>
       <tr><td><code>T-002</code></td><td>PHASES-Loader in game.py einbauen</td><td class="status-done">completed</td></tr>
+    </table>
+  </div>
+</section>
+<section class="feature" id="0011-projekt-dokumentation">
+  <h2>0011 — Projektdokumentation <span class="verdict-pass">✓ PASS</span></h2>
+  <div class="block">
+    <h3>Problem</h3>
+    <p>Das Spiel hat keine Verlinkung auf die SDD-Projektdokumentation. Spieler und Entwickler sehen nicht, wie das Spiel selbst mit SDD entwickelt wurde.</p>
+  </div>
+  <div class="block">
+    <h3>Lösung</h3>
+    <p>Ein Python-Script <code>generate_docs.py</code> liest alle .features/0001-0009/ Artefakte und generiert <code>dokumentation.html</code>. Die Abschlussseite des Spiels erhält einen erklärenden Text zu SDD-Artefakten und eine Einladung, <code>dokumentation.html</code> zu öffnen.</p>
+  </div>
+  <div class="block">
+    <h3>Funktionale Anforderungen</h3>
+    <ul>
+      <li>FR-001: <code>generate_docs.py</code> liest alle 9 Features und generiert <code>dokumentation.html</code>.</li>
+      <li>FR-002: <code>dokumentation.html</code> enthält pro Feature: Titel, Beschreibung, Spec-ACs und Review-Verdict.</li>
+      <li>FR-003: <code>show_summary()</code> zeigt nach dem Score-Panel einen Text zu SDD-Artefakten und den Dateinamen <code>dokumentation.html</code>.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Akzeptanzkriterien</h3>
+    <ul>
+      <li><span class="ac-icon">○</span> AC-001: <code>generate_docs.py</code> existiert und ist ausführbar — <code>py generate_docs.py</code> erzeugt <code>dokumentation.html</code>.</li>
+      <li><span class="ac-icon">○</span> AC-002: <code>dokumentation.html</code> enthält mindestens 9 Feature-Namen.</li>
+      <li><span class="ac-icon">○</span> AC-003: <code>inspect.getsource(show_summary)</code> enthält "dokumentation.html".</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h3>Tasks</h3>
+    <table>
+      <tr><th>Task</th><th>Titel</th><th>Status</th></tr>
+      <tr><td><code>T-001</code></td><td>generate_docs.py erstellen und dokumentation.html generieren</td><td class="status-done">completed</td></tr>
+      <tr><td><code>T-002</code></td><td>Abschlussseite um Dokumentationshinweis erweitern</td><td class="status-done">completed</td></tr>
     </table>
   </div>
 </section>
