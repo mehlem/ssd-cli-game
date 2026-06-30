@@ -1,0 +1,82 @@
+{
+  "schema_version": "sdd-result-v1",
+  "dispatch_id": "a061c64ecc0db8b3a",
+  "role": "spec-reviewer",
+  "status": "PASS",
+  "scope": "SPEC-0011 AC-001–AC-004 and FR-001–FR-004 against game.py and phases.json",
+  "summary": "All four ACs pass. phases.json exists with 7 named phases. game.py loads via json.load() with FileNotFoundError handling that prints to stderr with path and exits with code 1. No PHASES=[...] literal remains in game.py. No scope drift detected.",
+  "findings": [],
+  "verdict": "PASS — implementation satisfies all spec requirements; no missing requirements, no extra work, no scope drift.",
+  "requirements_checked": [
+    {
+      "id": "AC-001",
+      "status": "PASS",
+      "evidence": "phases.json:3,43,83,123,163,203,243 — 7 named phases; game.py:354-356 — json.load() loader; game.py:498-499 — for phase in PHASES: result = run_phase(phase)",
+      "notes": "All 7 phases present with correct structure. Direct pass-through from file to run_phase()."
+    },
+    {
+      "id": "AC-002",
+      "status": "PASS",
+      "evidence": "game.py:357-359 — except FileNotFoundError: print(f'Fehler: phases.json nicht gefunden. Erwartet: {_PHASES_PATH}', file=sys.stderr); sys.exit(1)",
+      "notes": "Error written to stderr; message contains absolute path via _PHASES_PATH; exit code 1 confirmed."
+    },
+    {
+      "id": "AC-003",
+      "status": "PASS",
+      "evidence": "game.py:356 PHASES = json.load(_f); game.py:498-499 for phase in PHASES: result = run_phase(phase)",
+      "notes": "No caching or transformation between file load and rendering — any text change in phases.json is reflected on next start."
+    },
+    {
+      "id": "AC-004",
+      "status": "PASS",
+      "evidence": "Grep for PHASES\\s*=\\s*\\[ across game.py returns no matches",
+      "notes": "Remaining hits of that pattern are in .features/ artifact markdown files (documentation), not in game.py source."
+    },
+    {
+      "id": "FR-001",
+      "status": "PASS",
+      "evidence": "game.py:353 _PHASES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'phases.json')",
+      "notes": "Loads from same directory as game.py using __file__-relative path."
+    },
+    {
+      "id": "FR-002",
+      "status": "PASS",
+      "evidence": "game.py:357-359",
+      "notes": "stderr output and exit code 1 confirmed."
+    },
+    {
+      "id": "FR-003",
+      "status": "PASS",
+      "evidence": "phases.json lines 3-283 — 7 phases each with name, zweck, kernfrage, prompt, interaktion, beispiel, fragen keys",
+      "notes": "Structure matches spec.md:87-88 field list."
+    },
+    {
+      "id": "FR-004",
+      "status": "PASS",
+      "evidence": "Grep for PHASES\\s*=\\s*\\[ in game.py: no matches",
+      "notes": "Literal removed; replaced by loader at game.py:354-359."
+    }
+  ],
+  "verified_clean": [
+    {
+      "area": "PHASES literal removal in game.py",
+      "method": "Grep for PHASES\\s*=\\s*\\[ in game.py",
+      "result": "No matches in game.py source"
+    },
+    {
+      "area": "phases.json — 7 phases",
+      "method": "Grep for \"name\": \"[0-9] in phases.json",
+      "result": "Exactly 7 matches at lines 3, 43, 83, 123, 163, 203, 243"
+    },
+    {
+      "area": "import json — stdlib only",
+      "method": "Grep for ^import json in game.py",
+      "result": "Present at game.py:14; no pip dependency introduced"
+    },
+    {
+      "area": "Scope drift — generate_docs.py",
+      "method": "Grep for phases.json and PHASES in generate_docs.py",
+      "result": "No matches — file untouched"
+    }
+  ]
+}

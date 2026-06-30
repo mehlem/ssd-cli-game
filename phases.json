@@ -1,0 +1,282 @@
+[
+  {
+    "name": "1 · Brief",
+    "zweck": "Kläre WARUM das Feature existieren soll, bevor irgendeine Zeile Code entsteht.",
+    "kernfrage": "Was ist das Problem? Wer hat es? Was passiert, wenn wir es nicht lösen?",
+    "prompt": "Du schreibst die Motivation für das PromptAndPray-Login. Was ist das WHY?",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Welche Abschnitte gehören zwingend in eine brief.md? Wähle die vollständige Liste.",
+      "optionen": [
+        "Motivation, Problem, Vision, Context, Constraints",
+        "Problem, Solution, User Stories, Acceptance Criteria",
+        "WHY, WHAT, WHERE, HOW, DO",
+        "Motivation, Stakeholders, Budget, Timeline"
+      ],
+      "richtig": "1",
+      "feedback_richtig": "In SDD gilt: brief.md beantwortet ausschließlich das WHY. Die 5 Pflichtabschnitte (Motivation, Problem, Vision, Context, Constraints) stellen sicher, dass alle Beteiligten das Problem verstehen, bevor eine technische Entscheidung getroffen wird.",
+      "feedback_falsch": "In SDD gilt: brief.md ist keine Spec (kein Solution/AC) und kein Projektplan (kein Budget/Timeline). Die 5 Pflichtabschnitte sind: Motivation, Problem, Vision, Context, Constraints — alles WHY-Ebene, nichts WHAT oder HOW."
+    },
+    "beispiel": {
+      "po": "Nutzer brechen beim Signup ab, weil das Formular zu lang ist. Ziel: Registrierung verein-  fachen, damit mehr Besucher zu Kunden werden und der Support weniger Rückfragen bekommt.",
+      "entwickler": "Leitet daraus Feature-Name und Ziel ab → sdd init login-feature \"Reduce signup friction\"",
+      "claude": "Erstellt brief.md, stellt WHY-Fragen (Motivation, Problem, Vision), aktiviert Brief-Phase-Gates",
+      "artefakt": ".features/0001-login-feature/brief.md mit Motivation, Problem & Vision"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Das Team will ein Login-Feature bauen. Wann darf der Entwickler anfangen zu coden?",
+        "optionen": [
+          "Erst wenn brief.md alle 5 Abschnitte hat und Design freigegeben ist",
+          "Sobald das Problem klar ist",
+          "Direkt — Coding ist die beste Dokumentation",
+          "Nach einem 15-Minuten-Meeting mit dem PO"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: kein Code vor dem Artifact-Chain-Start. brief.md muss vollständig sein (alle 5 Abschnitte: Motivation, Problem, Vision, Context, Constraints) und die Phase-Gate-Freigabe für Design muss erfolgt sein — erst dann beginnt das WHAT.",
+        "feedback_falsch": "In SDD gilt: Das Problem zu kennen reicht nicht aus. Das Team muss WHY vollständig dokumentiert haben — alle 5 Pflichtabschnitte in brief.md — bevor mit Design begonnen werden darf."
+      }
+    ]
+  },
+  {
+    "name": "2 · Design (Spec)",
+    "zweck": "Definiere WAS das Feature tun soll — in prüfbaren Anforderungen, nicht in Code.",
+    "kernfrage": "Welche Funktionen braucht es? Wie sehen die Akzeptanzkriterien aus?",
+    "prompt": "Schreibe eine User Story: 'Als [Wer] möchte ich [Was], damit [Warum].'",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Warum speichert SDD seine Artefakte als Markdown-Dateien (.md) statt in einem strukturierten Format wie JSON oder XML?",
+      "optionen": [
+        "Markdown ist menschenlesbar, versionierbar mit Git und braucht kein Spezialtool",
+        "Markdown wird von KI-Tools besser verarbeitet als JSON oder XML",
+        "JSON und XML sind zu komplex für Nicht-Entwickler",
+        "Markdown-Dateien sind kleiner und schneller zu laden"
+      ],
+      "richtig": "1",
+      "feedback_richtig": "In SDD gilt: Artefakte sind primär für Menschen — Entwickler, Reviewer, KI-Assistenten. Markdown ist in jedem Texteditor lesbar, lässt sich mit git diff nachverfolgen, und erfordert kein Werkzeug zum Öffnen oder Bearbeiten. JSON/XML hingegen sind maschinenoptimiert und erschweren kollaboratives Schreiben.",
+      "feedback_falsch": "In SDD gilt: Der Hauptgrund für Markdown ist Menschenlesbarkeit + Git-Versionierbarkeit. KI-Tools können beides gut lesen. Komplexität oder Dateigröße spielen keine Rolle. Markdown ermöglicht es, Artefakte direkt im Terminal, in VS Code oder auf GitHub zu lesen und zu reviewen — ohne Zwischentool."
+    },
+    "beispiel": {
+      "po": "Das Formular soll maximal 3 Pflichtfelder haben. Nach der Eingabe muss ein neuer Nutzer  sich sofort einloggen können — ohne E-Mail-Bestätigung im ersten Schritt.",
+      "entwickler": "Übersetzt PO-Wunsch in messbare Anforderungen → sdd spec 0001-login-feature, schreibt User  Stories & Akzeptanzkriterien in spec.md",
+      "claude": "Schlägt funktionale Anforderungen (FR-001 …) und Akzeptanzkriterien (AC-001 …) vor, warnt  bei widersprüchlichen oder unvollständigen Anforderungen",
+      "artefakt": ".features/0001-login-feature/spec.md mit User Stories, FRs und prüfbaren ACs"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Jana schreibt ein AC: 'Der Login soll gut funktionieren.' Warum ist das kein valides AC?",
+        "optionen": [
+          "Es ist nicht prüfbar — 'gut' kann nicht verifiziert werden",
+          "Es ist zu kurz — ACs müssen mindestens 3 Sätze lang sein",
+          "Es fehlt der Bezug zur Datenbank",
+          "ACs dürfen keine Verben enthalten"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: Jedes AC muss durch einen Befehl, eine Datei oder eine explizite Prüfung verifizierbar sein. 'Gut funktionieren' ist eine Meinung, kein prüfbares Kriterium — ein Reviewer kann es weder bestätigen noch widerlegen.",
+        "feedback_falsch": "In SDD gilt: Die Länge oder technische Tiefe eines ACs ist nicht entscheidend. Entscheidend ist: Kann es bewiesen werden? 'Gut' ist nicht messbar — ein AC muss eine klare Pass/Fail-Bedingung haben."
+      }
+    ]
+  },
+  {
+    "name": "3 · Research",
+    "zweck": "Finde heraus WO das Feature in der Codebasis lebt — mit Beweisen, nicht Vermutungen.",
+    "kernfrage": "Welche Dateien werden berührt? Welche Muster existieren bereits?",
+    "prompt": "Nenne zwei Dateien, die du dir vor der Implementierung anschauen würdest.",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Jana liest den Code und notiert drei Aussagen. Welche davon ist ein bestätigter Fakt für research.md?\n\n  A) 'Die login()-Funktion validiert das Passwort'\n  B) 'auth.py:42 enthält eine login()-Funktion' (nach Lesen der Datei)\n  C) 'Das Auth-Modul hat vermutlich einen Session-Cache'",
+      "optionen": [
+        "Aussage B — bestätigter Fakt mit Dateireferenz",
+        "Aussage A — klar und präzise formuliert",
+        "Aussage C — vernünftige Annahme basierend auf Erfahrung",
+        "Alle drei — Research sollte alles dokumentieren"
+      ],
+      "richtig": "1",
+      "feedback_richtig": "In SDD gilt: Ein Fakt in research.md braucht eine Quellenangabe (Datei:Zeile). Aussage B ist ein Fakt — sie wurde durch Lesen von auth.py:42 bestätigt. Aussage A klingt präzise, ist aber eine Behauptung ohne Beweis. Aussage C ist eine Hypothese. Beide gehören in die entsprechenden Abschnitte, nie in 'Facts'.",
+      "feedback_falsch": "In SDD gilt: Research unterscheidet strikt zwischen Fakt, Hypothese und Unbekanntem. Nur Aussagen mit Dateireferenz sind Fakten. Aussage B ('auth.py:42') ist der einzige Fakt — die anderen sind Behauptungen oder Hypothesen, auch wenn sie plausibel klingen."
+    },
+    "beispiel": {
+      "po": "Keine Aufgabe in dieser Phase — die fachlichen Vorgaben aus Brief und Design sind  abgeschlossen. Research ist reine Entwicklerarbeit.",
+      "entwickler": "sdd research 0001-login-feature — gibt den Startschuss, liest danach research.md und  prüft ob alle betroffenen Dateien gefunden wurden",
+      "claude": "Durchsucht die Codebase, kartiert betroffene Dateien (auth.py, forms.py …), identifiziert  Abhängigkeiten und Risiken, füllt research.md",
+      "artefakt": ".features/0001-login-feature/research.md mit Dateiliste, Abhängigkeiten und Risiken"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Die Research-Phase ist abgeschlossen. Was darf der Entwickler in research.md als Fakt eintragen?",
+        "optionen": [
+          "Nur Aussagen die durch Dateilesen bestätigt wurden, mit Datei:Zeile-Beleg",
+          "Alle Vermutungen und Hypothesen ohne Einschränkung",
+          "Nur Aussagen die der Tech-Lead genehmigt hat",
+          "Eine Zusammenfassung des KI-Chats"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: research.md unterscheidet strikt Fakten (mit Datei:Zeile-Beleg), Hypothesen (explizit markiert) und Unbekannte. Nur Aussagen die durch Dateilesen bestätigt wurden, gehören in den Fakten-Abschnitt.",
+        "feedback_falsch": "In SDD gilt: Hypothesen sind erlaubt, müssen aber explizit als solche markiert sein. Eine Vermutung ohne Dateireferenz ist kein Fakt — auch wenn sie noch so plausibel klingt."
+      }
+    ]
+  },
+  {
+    "name": "4 · Plan",
+    "zweck": "Entscheide WIE es gebaut wird — Architekturentscheidungen und atomare Tasks.",
+    "kernfrage": "Wie wird es gebaut? In welchen Scheiben? Wie prüfen wir jede?",
+    "prompt": "Formuliere eine Architekturentscheidung: 'Wir verwenden X statt Y, weil…'",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Drei Tasks für das PromptAndPray-Login sind geplant:\n\n  T-A: Datenbank-Schema für Users anlegen\n  T-B: Login-Endpoint implementieren\n  T-C: Session-Token generieren\n\nWelche Reihenfolge ist korrekt, damit keine Task auf unfertige Abhängigkeiten trifft?",
+      "optionen": [
+        "T-A → T-C → T-B  (Schema, dann Token, dann Endpoint)",
+        "T-B → T-A → T-C  (Endpoint zuerst, dann Rest)",
+        "T-A → T-B → T-C  (Schema, dann Endpoint, dann Token)",
+        "Alle gleichzeitig — Tasks sind unabhängig"
+      ],
+      "richtig": "3",
+      "feedback_richtig": "In SDD gilt: Tasks werden so geschnitten, dass jede Task auf abgeschlossenen Vorgängern aufbaut. T-A (Schema) muss vor T-B (Endpoint) fertig sein, weil der Endpoint die User-Tabelle braucht. T-C (Token) baut auf dem Endpoint auf. Diese Abhängigkeitskette heißt 'Depends-on' in tasks.md.",
+      "feedback_falsch": "In SDD gilt: Abhängigkeiten bestimmen die Task-Reihenfolge. Der Login-Endpoint (T-B) braucht das Datenbank-Schema (T-A). Der Session-Token (T-C) braucht einen funktionierenden Endpoint (T-B). Richtige Reihenfolge: T-A → T-B → T-C."
+    },
+    "beispiel": {
+      "po": "Keine Aufgabe in dieser Phase — Architektur und Aufgabenzerlegung sind reine Entwicklerarbeit.",
+      "entwickler": "sdd plan create 0001-login-feature — trifft Architekturentscheidungen, genehmigt die Task-Liste bevor die Umsetzung startet",
+      "claude": "Leitet aus research.md konkrete Architekturentscheidungen (AD-001 …) ab, zerlegt die Umsetzung in atomare, unabhängig prüfbare Tasks (T-001 …)",
+      "artefakt": ".features/0001-login-feature/plan.md + tasks.md mit abhängigkeitsgeordneten Tasks"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Wann ist ein Task in tasks.md bereit für die Implementierung?",
+        "optionen": [
+          "Wenn er einen Verifikationsbefehl hat, der nach Abschluss grün sein muss",
+          "Wenn der Entwickler ihn verstanden hat",
+          "Wenn er mindestens 5 Schritte beschreibt",
+          "Wenn der PO ihn genehmigt hat"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: Ein Task ist erst implementierbar wenn sein Verifikationsbefehl runnable ist — er schlägt JETZT fehl und muss NACH dem Task grün sein. Ohne messbares Done-Kriterium ist 'fertig' nicht beweisbar.",
+        "feedback_falsch": "In SDD gilt: Verstehen, Schrittanzahl und PO-Genehmigung ersetzen keinen lauffähigen Verifikationsbefehl. Ohne ihn gibt es keine objektive Fertigstellungsbedingung — 'fertig' bleibt eine Behauptung."
+      }
+    ]
+  },
+  {
+    "name": "5 · Implement",
+    "zweck": "Baue genau einen Task auf einmal — nicht mehr, nicht weniger.",
+    "kernfrage": "Ist die Verifikation für diesen Task grün? Dann erst: nächster Task.",
+    "prompt": "Was ist das Verifikationskommando für deinen ersten Task?",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Max führt das Verifikationskommando für T-001 aus:\n\n  > py -c \"import auth; assert callable(auth.login)\"\n  AssertionError\n\nWas tut Max als nächstes?",
+      "optionen": [
+        "Root Cause suchen: auth.py lesen und verstehen warum login() fehlt",
+        "Den Task als fertig markieren — der Code existiert irgendwo",
+        "Mehr Code schreiben bis der Fehler verschwindet",
+        "Das Verifikationskommando anpassen damit es passt"
+      ],
+      "richtig": "1",
+      "feedback_richtig": "In SDD gilt: Ein Task ist erst fertig wenn die Verifikation grün ist — nicht wenn der Code geschrieben wurde. Bei einem Fehler kommt zuerst die Ursachenanalyse, dann die chirurgische Korrektur. Das Verifikationskommando zu fälschen würde den Sinn von SDD zerstören.",
+      "feedback_falsch": "In SDD gilt: 'Done' bedeutet Verifikation bestanden, nicht 'Code geschrieben'. Weder blind mehr Code schreiben noch das Kommando anpassen sind korrekt. Der einzige Weg: Root Cause verstehen, dann gezielt fixen."
+    },
+    "beispiel": {
+      "po": "Keine Aufgabe in dieser Phase — der Plan ist freigegeben, die Umsetzung läuft.",
+      "entwickler": "sdd task start 0001-login-feature T-001 — startet genau einen Task, prüft das Ergebnis, markiert ihn als erledigt, dann weiter mit T-002",
+      "claude": "Implementiert Task für Task, führt nach jedem Task den Verifikationsbefehl aus und markiert erst dann done — kein Task gilt als fertig ohne bestandene Prüfung",
+      "artefakt": "Geänderte Produktionsdateien (auth.py, forms.py …) + aktualisierter Task-Status in tasks.md"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Max hat Task T-002 fast fertig, sieht aber einen offensichtlichen Bug in T-001-Code. Was tut er?",
+        "optionen": [
+          "Er notiert den Bug im Scratchpad und meldet ihn — T-001 ist nicht sein aktiver Task",
+          "Er fixt den Bug direkt — es sind nur 2 Zeilen",
+          "Er pausiert T-002 und öffnet T-001 wieder",
+          "Er wartet bis Review und hofft dass der Reviewer es findet"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: Scope-Disziplin. Max darf nur Dateien im aktiven Task T-002 anfassen. Den Bug in T-001 im Scratchpad notieren und dem Controller melden — dann als neuer Task oder T-001-Reopen behandeln. 'Während ich hier bin' ist genau die Denkweise, die Scope-Drift erzeugt.",
+        "feedback_falsch": "In SDD gilt: Auch 2 Zeilen außerhalb des aktiven Tasks sind ein Scope-Verstoß. Direktes Fixen ohne Taskzuordnung untergräbt die Traceability. Pausieren und T-001 erneut öffnen entscheidet der Controller — nicht der Implementierer."
+      }
+    ]
+  },
+  {
+    "name": "6 · Review",
+    "zweck": "Prüfe unabhängig, ob der Code dem Spec entspricht — kein Selbst-Review.",
+    "kernfrage": "Erfüllt der Code alle Akzeptanzkriterien? Gibt es Scope-Drift?",
+    "prompt": "Welches AC würdest du als erstes prüfen, und wie?",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Das AC lautet: 'Gegeben ein ungültiges Passwort, wenn login() aufgerufen wird, dann gibt die Funktion False zurück.'\n\nDer Code tut: Bei falschem Passwort wird eine Exception geworfen.\n\nWie lautet dein Review-Urteil?",
+      "optionen": [
+        "FAIL — der Code wirft eine Exception statt False zurückzugeben",
+        "PASS — eine Exception ist auch eine Form von 'nicht eingeloggt'",
+        "PASS — der Implementierer hat es sicher richtig gemeint",
+        "HOLD — zuerst den Implementierer fragen was er beabsichtigt hat"
+      ],
+      "richtig": "1",
+      "feedback_richtig": "In SDD gilt: Review prüft den Code gegen den Spec — unabhängig und ohne Annahmen. Das AC sagt explizit 'gibt False zurück'. Eine Exception ist kein False. Das ist ein FAIL — klar, evidenzbasiert, ohne Interpretation. Der Reviewer vertraut dem Spec, nicht der Absicht des Implementierers.",
+      "feedback_falsch": "In SDD gilt: Review ist keine Interpretationsübung. Das AC sagt 'False zurückgeben' — der Code wirft eine Exception. Das ist FAIL. Weder 'gut gemeint' noch Rückfragen ersetzen die Spec-Prüfung. Das SDD-Plugin enforced: Reviewer liest Spec, dann Code — in dieser Reihenfolge."
+    },
+    "beispiel": {
+      "po": "Prüft fachlich: \"Ist das, was gebaut wurde, das was ich in Brief und Design gemeint habe?\" — bestätigt oder meldet Abweichungen vom ursprünglichen Ziel",
+      "entwickler": "sdd review 0001-login-feature — liest spec.md zuerst, prüft dann den Code gegen jeden AC, dokumentiert Befunde in review.md",
+      "claude": "Validiert jeden AC mit Belegen aus dem Code, setzt verdict: pass oder fail mit Begründung — kein Verdict ohne gelesene Spec",
+      "artefakt": ".features/0001-login-feature/review.md mit AC-Nachweisen und finalem Verdict"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Der Implementierer sagt: 'Ich habe AC-003 getestet, es läuft.' Was macht der Reviewer?",
+        "optionen": [
+          "Er prüft AC-003 selbst mit Datei-Evidenz — 'ich habe getestet' ist kein Beweis",
+          "Er vertraut dem Implementierer und hakt AC-003 ab",
+          "Er fragt den Implementierer nach mehr Details",
+          "Er überspringt AC-003 und prüft die anderen"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: Review ist unabhängige Verifikation. 'Ich habe getestet' ist eine Behauptung — kein Beweis. Der Reviewer liest die Spec, liest den Code, und findet konkrete file:line-Evidenz oder führt den Verifikationsbefehl selbst aus.",
+        "feedback_falsch": "In SDD gilt: Der Reviewer vertraut keiner Behauptung ohne Beleg. Rückfragen oder Überspringen ersetzen keine eigene Verifikation. Jedes AC braucht Evidenz — das ist der Sinn von unabhängigem Review."
+      }
+    ]
+  },
+  {
+    "name": "7 · Close",
+    "zweck": "Sichere das gewonnene Wissen und schließe das Feature sauber ab.",
+    "kernfrage": "Was haben wir gelernt? Was trägt ins nächste Feature?",
+    "prompt": "Notiere einen Satz, den du ins KNOWLEDGE.md schreiben würdest.",
+    "interaktion": {
+      "typ": "mc",
+      "frage": "Was gehört in die knowledge.md beim Abschluss eines Features?",
+      "optionen": [
+        "Wiederverwendbares Wissen: Muster, Stolpersteine, technische Entdeckungen",
+        "Eine Zusammenfassung aller Tasks und ob sie bestanden haben",
+        "Das Review-Verdict und die Namen der Reviewer",
+        "Links zu allen Pull Requests und Commits des Features"
+      ],
+      "richtig": "1",
+      "feedback_richtig": "In SDD gilt: knowledge.md speichert dauerhaftes, wiederverwendbares Wissen — Muster die auch beim nächsten Feature gelten, Fallstricke die vermieden werden sollten, technische Entdeckungen die das Team nicht nochmal neu herausfinden soll. Task-Status, Review-Verdicts und Commits gehören ins Artifact-Log, nicht in Knowledge.",
+      "feedback_falsch": "In SDD gilt: knowledge.md ist kein Protokoll — es ist ein Wissensspeicher. Weder Task-Status noch Review-Daten noch Commit-Links gehören hinein. Das SDD-Plugin graduiert nur Einträge die über das aktuelle Feature hinaus wertvoll sind: Muster, Gotchas, Erkenntnisse."
+    },
+    "beispiel": {
+      "po": "Keine Aufgabe in dieser Phase — das Feature ist live, das Ziel ist erreicht.",
+      "entwickler": "sdd close 0001-login-feature — bestätigt den Abschluss, prüft ob alle Erkenntnisse dokumentiert sind",
+      "claude": "Promoviert wertvolle Erkenntnisse aus dem Scratchpad in KNOWLEDGE.md, finalisiert alle Artefakte, schließt das Feature ab",
+      "artefakt": ".features/0001-login-feature/knowledge.md + abgeschlossene Feature-Artefakte"
+    },
+    "fragen": [
+      {
+        "typ": "mc",
+        "frage": "Das Feature ist reviewed und abgenommen. Was ist KEIN Teil von Close?",
+        "optionen": [
+          "Neue Anforderungen hinzufügen die beim Review aufgefallen sind",
+          "Erkenntnisse aus dem Scratchpad in KNOWLEDGE.md graduieren",
+          "`sdd close` ausführen um Artefakte zu finalisieren",
+          "Prüfen ob alle Tasks abgeschlossen sind"
+        ],
+        "richtig": "1",
+        "feedback_richtig": "In SDD gilt: Close ist kein Ort für neuen Scope. Anforderungen die beim Review auffallen, gehören in ein eigenes Feature via `sdd init`. Close schließt ab — es erweitert nicht. Neuer Scope in Close umgeht Brief, Design und Review.",
+        "feedback_falsch": "In SDD gilt: Knowledge-Graduation, `sdd close` ausführen und Task-Status prüfen sind legitime Close-Aktivitäten. Neuer Scope dagegen gehört in ein neues Feature mit vollständigem Artifact-Chain."
+      }
+    ]
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "feature": "0011-phases-externalize",
+  "feature_id": "0011-phases-externalize",
+  "feature_path": "0011-phases-externalize",
+  "feature_dir": ".features/0011-phases-externalize",
+  "feature_group": null,
+  "phase": "close",
+  "raw_phase": "close",
+  "effective_phase": "close",
+  "execution_phase": "close",
+  "profile": "lite",
+  "autonomous": null,
+  "description": {
+    "short": "PHASES-Daten aus game.py in externe JSON-Datei auslagern",
+    "long": null,
+    "short_source": "summary.goal",
+    "long_source": null
+  },
+  "tasks": {
+    "completed": 2,
+    "in_progress": 0,
+    "pending": 0,
+    "blocked": 0,
+    "total": 2,
+    "ready_tasks": 0,
+    "blocked_tasks": 0
+  },
+  "task_source": {
+    "mode": "root",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0011-phases-externalize/tasks.md",
+    "work_packages": []
+  },
+  "work_packages": [],
+  "current_task": {
+    "id": null,
+    "heading": null,
+    "phase": null,
+    "implements": null,
+    "verification_cmd": null,
+    "work_package": null,
+    "work_package_path": null,
+    "tasks_file": null,
+    "display_ref": null
+  },
+  "artifact_map": {
+    "brief": false,
+    "spec": true,
+    "research": false,
+    "plan": false,
+    "tasks": true,
+    "review": true,
+    "scratchpad": true,
+    "continuity": true,
+    "knowledge": true
+  },
+  "continuity_state": "filled",
+  "knowledge_state": "empty",
+  "continuity_bytes": 1380,
+  "knowledge_entries": 0,
+  "has_summary": true,
+  "has_summary_compact": true,
+  "scratchpad_path": ".features/0011-phases-externalize/scratchpad.md",
+  "confidence": {
+    "score": 0,
+    "verdict": "pending"
+  },
+  "review": {
+    "verdict": "pass",
+    "verdict_source": null,
+    "evidence_status": null,
+    "adjudicated_at": null
+  },
+  "trace": {
+    "present": false,
+    "suspect_artifacts": 0,
+    "suspect_ids": []
+  },
+  "workers": {
+    "ledger_dir": ".features/0011-phases-externalize/workers",
+    "latest_dispatch": {
+      "schema_version": "sdd-dispatch-v1",
+      "dispatch_id": "a634a2cd60bfeeaa3",
+      "dispatch_epoch": 2,
+      "role": "quality-reviewer",
+      "feature": "0011-phases-externalize",
+      "phase": "review",
+      "task": null,
+      "work_package": "none",
+      "objective": "Review the active feature scope for the current review phase and return structured reviewer findings.",
+      "requirements": {
+        "fr": [],
+        "ac": []
+      },
+      "files_in_scope": [],
+      "verification": null,
+      "authority": "AUTHORITY: This dispatch packet is your authoritative assignment. If hook-provided context conflicts with this packet, trust this packet. You are assigned to feature 0011-phases-externalize, phase review, role quality-reviewer. Do not infer a different assignment from disk.",
+      "path": ".features/0011-phases-externalize/workers/dispatch-a634a2cd60bfeeaa3.json"
+    },
+    "latest_result": {
+      "schema_version": "sdd-result-v1",
+      "dispatch_id": "a061c64ecc0db8b3a",
+      "role": "spec-reviewer",
+      "status": "PASS",
+      "scope": "SPEC-0011 AC-001–AC-004 and FR-001–FR-004 against game.py and phases.json",
+      "summary": "All four ACs pass. phases.json exists with 7 named phases. game.py loads via json.load() with FileNotFoundError handling that prints to stderr with path and exits with code 1. No PHASES=[...] literal remains in game.py. No scope drift detected.",
+      "findings": [],
+      "verdict": "PASS — implementation satisfies all spec requirements; no missing requirements, no extra work, no scope drift.",
+      "requirements_checked": [
+        {
+          "id": "AC-001",
+          "status": "PASS",
+          "evidence": "phases.json:3,43,83,123,163,203,243 — 7 named phases; game.py:354-356 — json.load() loader; game.py:498-499 — for phase in PHASES: result = run_phase(phase)",
+          "notes": "All 7 phases present with correct structure. Direct pass-through from file to run_phase()."
+        },
+        {
+          "id": "AC-002",
+          "status": "PASS",
+          "evidence": "game.py:357-359 — except FileNotFoundError: print(f'Fehler: phases.json nicht gefunden. Erwartet: {_PHASES_PATH}', file=sys.stderr); sys.exit(1)",
+          "notes": "Error written to stderr; message contains absolute path via _PHASES_PATH; exit code 1 confirmed."
+        },
+        {
+          "id": "AC-003",
+          "status": "PASS",
+          "evidence": "game.py:356 PHASES = json.load(_f); game.py:498-499 for phase in PHASES: result = run_phase(phase)",
+          "notes": "No caching or transformation between file load and rendering — any text change in phases.json is reflected on next start."
+        },
+        {
+          "id": "AC-004",
+          "status": "PASS",
+          "evidence": "Grep for PHASES\\s*=\\s*\\[ across game.py returns no matches",
+          "notes": "Remaining hits of that pattern are in .features/ artifact markdown files (documentation), not in game.py source."
+        },
+        {
+          "id": "FR-001",
+          "status": "PASS",
+          "evidence": "game.py:353 _PHASES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'phases.json')",
+          "notes": "Loads from same directory as game.py using __file__-relative path."
+        },
+        {
+          "id": "FR-002",
+          "status": "PASS",
+          "evidence": "game.py:357-359",
+          "notes": "stderr output and exit code 1 confirmed."
+        },
+        {
+          "id": "FR-003",
+          "status": "PASS",
+          "evidence": "phases.json lines 3-283 — 7 phases each with name, zweck, kernfrage, prompt, interaktion, beispiel, fragen keys",
+          "notes": "Structure matches spec.md:87-88 field list."
+        },
+        {
+          "id": "FR-004",
+          "status": "PASS",
+          "evidence": "Grep for PHASES\\s*=\\s*\\[ in game.py: no matches",
+          "notes": "Literal removed; replaced by loader at game.py:354-359."
+        }
+      ],
+      "verified_clean": [
+        {
+          "area": "PHASES literal removal in game.py",
+          "method": "Grep for PHASES\\s*=\\s*\\[ in game.py",
+          "result": "No matches in game.py source"
+        },
+        {
+          "area": "phases.json — 7 phases",
+          "method": "Grep for \"name\": \"[0-9] in phases.json",
+          "result": "Exactly 7 matches at lines 3, 43, 83, 123, 163, 203, 243"
+        },
+        {
+          "area": "import json — stdlib only",
+          "method": "Grep for ^import json in game.py",
+          "result": "Present at game.py:14; no pip dependency introduced"
+        },
+        {
+          "area": "Scope drift — generate_docs.py",
+          "method": "Grep for phases.json and PHASES in generate_docs.py",
+          "result": "No matches — file untouched"
+        }
+      ],
+      "path": ".features/0011-phases-externalize/workers/result-a061c64ecc0db8b3a.json"
+    },
+    "pending_controller_action": {
+      "feature": "0011-phases-externalize",
+      "phase": "review",
+      "role": "spec-reviewer",
+      "dispatch_id": "a061c64ecc0db8b3a",
+      "status": "PASS",
+      "result_path": ".features/0011-phases-externalize/workers/result-a061c64ecc0db8b3a.json",
+      "transcript_path": "C:\\Users\\mehlem\\.claude\\projects\\C--Users-mehlem-OneDrive---PTA-Gruppe-Lerning-KI-Claude-Code-SDD-SSD-Beispielprojekt\\6778aab6-0cfe-4746-a32c-9b0f7763dc5a\\subagents\\agent-a061c64ecc0db8b3a.jsonl",
+      "has_warnings": false
+    }
+  }
+}
