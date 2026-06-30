@@ -1,2 +1,2 @@
 @echo off
-start "" /max cmd /c "py "%~dp0game.py" & pause"
+wt --maximized cmd /c "py "%~dp0game.py" & pause"

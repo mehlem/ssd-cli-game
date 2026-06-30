@@ -280,7 +280,7 @@ def show_intro():
     # --- Szene 3: Deine Mission ---
     clear_screen()
     print()
-    print_centered(f"{FETT}{GRÜN}Deine Mission{RESET}")
+    print(f"{FETT}{GRÜN}Deine Mission{RESET}")
     print()
     print_box([
         "Du spielst jetzt eine vollständige SDD-Runde durch —",
@@ -833,7 +833,7 @@ def run_phase(phase):
 def show_summary(score, total):
     clear_screen()
     print()
-    print_centered(f"{FETT}{GRÜN}★  Glückwunsch — du hast alle 7 Phasen durchlaufen!  ★{RESET}")
+    print(f"{FETT}{GRÜN}★  Glückwunsch — du hast alle 7 Phasen durchlaufen!  ★{RESET}")
     print()
     sterne = "★" * score + "☆" * (total - score)
     if score > 6:
