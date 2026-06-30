@@ -18,7 +18,7 @@
       "feedback_falsch": "In SDD gilt: brief.md ist keine Spec (kein Solution/AC) und kein Projektplan (kein Budget/Timeline). Die 5 Pflichtabschnitte sind: Motivation, Problem, Vision, Context, Constraints — alles WHY-Ebene, nichts WHAT oder HOW."
     },
     "beispiel": {
-      "po": "Nutzer brechen beim Signup ab, weil das Formular zu lang ist. Ziel: Registrierung verein-  fachen, damit mehr Besucher zu Kunden werden und der Support weniger Rückfragen bekommt.",
+      "po": "Nutzer brechen beim Signup ab, weil das Formular zu lang ist. Ziel: Registrierung vereinfachen, damit mehr Besucher zu Kunden werden und der Support weniger Rückfragen bekommt.",
       "entwickler": "Leitet daraus Feature-Name und Ziel ab → sdd init login-feature \"Reduce signup friction\"",
       "claude": "Erstellt brief.md, stellt WHY-Fragen (Motivation, Problem, Vision), aktiviert Brief-Phase-Gates",
       "artefakt": ".features/0001-login-feature/brief.md mit Motivation, Problem & Vision"
