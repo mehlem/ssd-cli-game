@@ -113,10 +113,15 @@ def print_box(lines, color=BLAU):
     for line in lines:
         for subline in line.split("\n"):
             plain = _ANSI_RE.sub("", subline)
-            wrapped = textwrap.wrap(plain, width=w - 4) or [""]
-            for wline in wrapped:
-                padding = " " * max(0, w - 4 - _display_len(wline))
-                print(f"  {color}│{RESET}  {wline}{padding}{color}│{RESET}")
+            if _display_len(plain) <= w - 4:
+                # Passt auf eine Zeile — Original mit ANSI ausgeben
+                padding = " " * max(0, w - 4 - _display_len(plain))
+                print(f"  {color}│{RESET}  {subline}{padding}{color}│{RESET}")
+            else:
+                # Umbrechung nötig — ANSI kann nicht über Zeilengrenzen erhalten bleiben
+                for wline in textwrap.wrap(plain, width=w - 4) or [""]:
+                    padding = " " * max(0, w - 4 - _display_len(wline))
+                    print(f"  {color}│{RESET}  {wline}{padding}{color}│{RESET}")
     print(f"  {color}└{h_line}┘{RESET}")
 
 
