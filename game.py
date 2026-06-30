@@ -874,7 +874,7 @@ def show_summary(score, total):
     print()
     while True:
         antwort = input(
-            f"  {GRAU}[ Enter — neu starten ]  [ d — Dokumentation öffnen ]  [ x — Ende ]{RESET}  "
+            f"  {GRAU}[ Enter — Ende ]  [ d — Dokumentation öffnen ]{RESET}  "
         ).strip().lower()
         if antwort == "x":
             sys.exit(0)
