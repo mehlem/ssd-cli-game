@@ -12,8 +12,7 @@ Download: https://www.python.org/downloads/
 Starten
 -------
 Windows (Doppelklick):
-  start_game.bat       -- oeffnet ein neues CMD-Fenster (empfohlen)
-  start_game.ps1       -- oeffnet ein neues PowerShell-Fenster (farbige Emojis)
+  start_game.bat       -- oeffnet ein neues PowerShell-Fenster (farbige Emojis)
 
 Windows (Terminal):
   py game.py
