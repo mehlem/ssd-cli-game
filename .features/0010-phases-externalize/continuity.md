@@ -1,6 +1,6 @@
 ---
-id: CONT-0011
-feature: "0011-phases-externalize"
+id: CONT-0010
+feature: "0010-phases-externalize"
 title: "Phases Externalize"
 type: continuity
 schema_version: 2
@@ -11,14 +11,14 @@ status: completed
 created: 2026-06-30
 updated: 2026-06-30
 related:
-  brief: BRIEF-0011
-  spec: SPEC-0011
-  research: RESEARCH-0011
-  plan: PLAN-0011
-  tasks: TASKS-0011
-  review: REVIEW-0011
-  scratchpad: SCRATCH-0011
-  knowledge: KB-0011
+  brief: BRIEF-0010
+  spec: SPEC-0010
+  research: RESEARCH-0010
+  plan: PLAN-0010
+  tasks: TASKS-0010
+  review: REVIEW-0010
+  scratchpad: SCRATCH-0010
+  knowledge: KB-0010
 tags: []
 ---
 
@@ -64,7 +64,7 @@ beim Start per `json.load()`. Spielverhalten ändert sich für den Nutzer nicht.
 
 - game.py (geändert: import json, PHASES-Loader Z. 349–361)
 - phases.json (neu, ~25 KB, 7 Phasen)
-- .features/0011-phases-externalize/review.md (in Bearbeitung)
+- .features/0010-phases-externalize/review.md (in Bearbeitung)
 <!-- SDD-AUTO-END -->
 
 ## Open Questions

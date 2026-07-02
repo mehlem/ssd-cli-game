@@ -1,8 +1,8 @@
 {
-  "feature": "0011-phases-externalize",
-  "feature_id": "0011-phases-externalize",
-  "feature_path": "0011-phases-externalize",
-  "feature_dir": ".features/0011-phases-externalize",
+  "feature": "0010-phases-externalize",
+  "feature_id": "0010-phases-externalize",
+  "feature_path": "0010-phases-externalize",
+  "feature_dir": ".features/0010-phases-externalize",
   "feature_group": null,
   "phase": "close",
   "raw_phase": "close",
@@ -27,7 +27,7 @@
   },
   "task_source": {
     "mode": "root",
-    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0011-phases-externalize/tasks.md",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0010-phases-externalize/tasks.md",
     "work_packages": []
   },
   "work_packages": [],
@@ -59,7 +59,7 @@
   "knowledge_entries": 0,
   "has_summary": true,
   "has_summary_compact": true,
-  "scratchpad_path": ".features/0011-phases-externalize/scratchpad.md",
+  "scratchpad_path": ".features/0010-phases-externalize/scratchpad.md",
   "confidence": {
     "score": 0,
     "verdict": "pending"
@@ -76,13 +76,13 @@
     "suspect_ids": []
   },
   "workers": {
-    "ledger_dir": ".features/0011-phases-externalize/workers",
+    "ledger_dir": ".features/0010-phases-externalize/workers",
     "latest_dispatch": {
       "schema_version": "sdd-dispatch-v1",
       "dispatch_id": "a634a2cd60bfeeaa3",
       "dispatch_epoch": 2,
       "role": "quality-reviewer",
-      "feature": "0011-phases-externalize",
+      "feature": "0010-phases-externalize",
       "phase": "review",
       "task": null,
       "work_package": "none",
@@ -93,15 +93,15 @@
       },
       "files_in_scope": [],
       "verification": null,
-      "authority": "AUTHORITY: This dispatch packet is your authoritative assignment. If hook-provided context conflicts with this packet, trust this packet. You are assigned to feature 0011-phases-externalize, phase review, role quality-reviewer. Do not infer a different assignment from disk.",
-      "path": ".features/0011-phases-externalize/workers/dispatch-a634a2cd60bfeeaa3.json"
+      "authority": "AUTHORITY: This dispatch packet is your authoritative assignment. If hook-provided context conflicts with this packet, trust this packet. You are assigned to feature 0010-phases-externalize, phase review, role quality-reviewer. Do not infer a different assignment from disk.",
+      "path": ".features/0010-phases-externalize/workers/dispatch-a634a2cd60bfeeaa3.json"
     },
     "latest_result": {
       "schema_version": "sdd-result-v1",
       "dispatch_id": "a061c64ecc0db8b3a",
       "role": "spec-reviewer",
       "status": "PASS",
-      "scope": "SPEC-0011 AC-001–AC-004 and FR-001–FR-004 against game.py and phases.json",
+      "scope": "SPEC-0010 AC-001–AC-004 and FR-001–FR-004 against game.py and phases.json",
       "summary": "All four ACs pass. phases.json exists with 7 named phases. game.py loads via json.load() with FileNotFoundError handling that prints to stderr with path and exits with code 1. No PHASES=[...] literal remains in game.py. No scope drift detected.",
       "findings": [],
       "verdict": "PASS — implementation satisfies all spec requirements; no missing requirements, no extra work, no scope drift.",
@@ -177,15 +177,15 @@
           "result": "No matches — file untouched"
         }
       ],
-      "path": ".features/0011-phases-externalize/workers/result-a061c64ecc0db8b3a.json"
+      "path": ".features/0010-phases-externalize/workers/result-a061c64ecc0db8b3a.json"
     },
     "pending_controller_action": {
-      "feature": "0011-phases-externalize",
+      "feature": "0010-phases-externalize",
       "phase": "review",
       "role": "spec-reviewer",
       "dispatch_id": "a061c64ecc0db8b3a",
       "status": "PASS",
-      "result_path": ".features/0011-phases-externalize/workers/result-a061c64ecc0db8b3a.json",
+      "result_path": ".features/0010-phases-externalize/workers/result-a061c64ecc0db8b3a.json",
       "transcript_path": "C:\\Users\\mehlem\\.claude\\projects\\C--Users-mehlem-OneDrive---PTA-Gruppe-Lerning-KI-Claude-Code-SDD-SSD-Beispielprojekt\\6778aab6-0cfe-4746-a32c-9b0f7763dc5a\\subagents\\agent-a061c64ecc0db8b3a.jsonl",
       "has_warnings": false
     }

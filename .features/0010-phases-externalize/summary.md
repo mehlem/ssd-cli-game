@@ -1,13 +1,13 @@
 > AUTO-GENERATED — DO NOT EDIT
-> Refresh via: sdd summary 0011-phases-externalize
+> Refresh via: sdd summary 0010-phases-externalize
 
-# SDD Summary: 0011-phases-externalize
+# SDD Summary: 0010-phases-externalize
 
 ## Goal
 Den ~450-Zeilen PHASES-Literal aus game.py in eine externe `phases.json`-Datei auslagern,
 
 ## Current State
-- Feature: 0011-phases-externalize [selected]
+- Feature: 0010-phases-externalize [selected]
 - Phase: close
 - Current task: none
 - Progress: 2 done / 0 active / 0 pending / 0 blocked
@@ -16,7 +16,7 @@ Den ~450-Zeilen PHASES-Literal aus game.py in eine externe `phases.json`-Datei a
 graduate scratchpad findings to knowledge.md; finalize all artifact statuses; Completion means the verification command passed or the evidence exists. Writing code is not done.
 
 ## Next
-graduate knowledge, finalize artifacts, or sdd reopen 0011-phases-externalize to extend
+graduate knowledge, finalize artifacts, or sdd reopen 0010-phases-externalize to extend
 
 ## Reasoning State
 - Active Assumptions:

@@ -1,6 +1,6 @@
 ---
-id: SPEC-0010
-feature: "0010-projekt-dokumentation"
+id: SPEC-0011
+feature: "0011-projekt-dokumentation"
 title: "Projekt Dokumentation"
 type: spec
 schema_version: 2
@@ -10,8 +10,8 @@ phase: spec
 created: 2026-06-29
 updated: 2026-06-29
 related:
-  tasks: TASKS-0010
-  review: REVIEW-0010
+  tasks: TASKS-0011
+  review: REVIEW-0011
 tags: []
 ---
 

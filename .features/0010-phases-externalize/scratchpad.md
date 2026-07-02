@@ -1,6 +1,6 @@
 ---
-id: SCRATCH-0011
-feature: "0011-phases-externalize"
+id: SCRATCH-0010
+feature: "0010-phases-externalize"
 title: "Phases Externalize"
 type: scratchpad
 
@@ -15,14 +15,14 @@ status: active
 created: 2026-06-30
 updated: 2026-06-30
 related:
-  brief: BRIEF-0011
-  spec: SPEC-0011
-  research: RESEARCH-0011
-  plan: PLAN-0011
-  tasks: TASKS-0011
-  review: REVIEW-0011
-  continuity: CONT-0011
-  knowledge: KB-0011
+  brief: BRIEF-0010
+  spec: SPEC-0010
+  research: RESEARCH-0010
+  plan: PLAN-0010
+  tasks: TASKS-0010
+  review: REVIEW-0010
+  continuity: CONT-0010
+  knowledge: KB-0010
 tags: []
 ---
 

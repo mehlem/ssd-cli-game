@@ -1,6 +1,6 @@
 ---
-id: REVIEW-0010
-feature: "0010-projekt-dokumentation"
+id: REVIEW-0011
+feature: "0011-projekt-dokumentation"
 title: "Projekt Dokumentation"
 type: review
 schema_version: 2
@@ -8,18 +8,18 @@ status: completed
 phase: review
 created: 2026-06-29
 updated: 2026-06-29
-source: SPEC-0010
-links: {"derived_from":["SPEC-0010"],"informed_by":[],"supersedes":[]}
-based_on: {"SPEC-0010":"sha256:cdd7c96e5a29277f17d3cbef7a710cba2591a65267419cc1aac650e958a30f75","TASKS-0010":"sha256:c5a970ec25fe9abe890224f8a9d5cc15ee433368777836406e6bad26354f8266"}
+source: SPEC-0011
+links: {"derived_from":["SPEC-0011"],"informed_by":[],"supersedes":[]}
+based_on: {"SPEC-0011":"sha256:cdd7c96e5a29277f17d3cbef7a710cba2591a65267419cc1aac650e958a30f75","TASKS-0011":"sha256:c5a970ec25fe9abe890224f8a9d5cc15ee433368777836406e6bad26354f8266"}
 related:
-  brief: BRIEF-0010
-  spec: SPEC-0010
-  research: RESEARCH-0010
-  plan: PLAN-0010
-  tasks: TASKS-0010
-  scratchpad: SCRATCH-0010
-  continuity: CONT-0010
-  knowledge: KB-0010
+  brief: BRIEF-0011
+  spec: SPEC-0011
+  research: RESEARCH-0011
+  plan: PLAN-0011
+  tasks: TASKS-0011
+  scratchpad: SCRATCH-0011
+  continuity: CONT-0011
+  knowledge: KB-0011
 verdict: pass
 # close_commit: populated by `sdd record-close` after the close commit exists
 # closed_at: populated from the close commit author date (YYYY-MM-DD)

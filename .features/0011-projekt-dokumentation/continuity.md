@@ -1,6 +1,6 @@
 ---
-id: CONT-0010
-feature: "0010-projekt-dokumentation"
+id: CONT-0011
+feature: "0011-projekt-dokumentation"
 title: "Projekt Dokumentation"
 type: continuity
 schema_version: 2
@@ -11,14 +11,14 @@ status: completed
 created: 2026-06-29
 updated: 2026-06-29
 related:
-  brief: BRIEF-0010
-  spec: SPEC-0010
-  research: RESEARCH-0010
-  plan: PLAN-0010
-  tasks: TASKS-0010
-  review: REVIEW-0010
-  scratchpad: SCRATCH-0010
-  knowledge: KB-0010
+  brief: BRIEF-0011
+  spec: SPEC-0011
+  research: RESEARCH-0011
+  plan: PLAN-0011
+  tasks: TASKS-0011
+  review: REVIEW-0011
+  scratchpad: SCRATCH-0011
+  knowledge: KB-0011
 tags: []
 ---
 

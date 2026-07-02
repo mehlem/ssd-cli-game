@@ -3,7 +3,7 @@
   "dispatch_id": "a061c64ecc0db8b3a",
   "role": "spec-reviewer",
   "status": "PASS",
-  "scope": "SPEC-0011 AC-001–AC-004 and FR-001–FR-004 against game.py and phases.json",
+  "scope": "SPEC-0010 AC-001–AC-004 and FR-001–FR-004 against game.py and phases.json",
   "summary": "All four ACs pass. phases.json exists with 7 named phases. game.py loads via json.load() with FileNotFoundError handling that prints to stderr with path and exits with code 1. No PHASES=[...] literal remains in game.py. No scope drift detected.",
   "findings": [],
   "verdict": "PASS — implementation satisfies all spec requirements; no missing requirements, no extra work, no scope drift.",

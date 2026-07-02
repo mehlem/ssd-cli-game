@@ -1,6 +1,6 @@
 ---
-id: REVIEW-0011
-feature: "0011-phases-externalize"
+id: REVIEW-0010
+feature: "0010-phases-externalize"
 title: "PHASES-Daten in externe JSON-Datei auslagern"
 type: review
 schema_version: 2
@@ -8,16 +8,16 @@ status: completed
 phase: review
 created: 2026-06-30
 updated: 2026-06-30
-source: SPEC-0011
-links: {"derived_from":["SPEC-0011"],"informed_by":[],"supersedes":[]}
-based_on: {"SPEC-0011":"sha256:8dd45eb3ba434f745a4eb23616af78cf37eed2b3ad83858fcc558221d89ad018","TASKS-0011":"sha256:4cebe9e2c365442c4c400dab0a6d497f73f754b1c13809ae27fb4dc2d8f26ccb"}
+source: SPEC-0010
+links: {"derived_from":["SPEC-0010"],"informed_by":[],"supersedes":[]}
+based_on: {"SPEC-0010":"sha256:8dd45eb3ba434f745a4eb23616af78cf37eed2b3ad83858fcc558221d89ad018","TASKS-0010":"sha256:4cebe9e2c365442c4c400dab0a6d497f73f754b1c13809ae27fb4dc2d8f26ccb"}
 related:
-  brief: BRIEF-0011
-  spec: SPEC-0011
-  tasks: TASKS-0011
-  scratchpad: SCRATCH-0011
-  continuity: CONT-0011
-  knowledge: KB-0011
+  brief: BRIEF-0010
+  spec: SPEC-0010
+  tasks: TASKS-0010
+  scratchpad: SCRATCH-0010
+  continuity: CONT-0010
+  knowledge: KB-0010
 verdict: pass
 tags: []
 close_commit: 1b4d14e19946c12cbcd0ec8c2e8314466a16e15c

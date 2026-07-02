@@ -1,6 +1,6 @@
 ---
-id: TASKS-0011
-feature: "0011-phases-externalize"
+id: TASKS-0010
+feature: "0010-phases-externalize"
 title: "PHASES-Daten in externe JSON-Datei auslagern"
 type: tasks
 schema_version: 2
@@ -8,14 +8,14 @@ status: completed
 phase: implement
 created: 2026-06-30
 updated: 2026-06-30
-source: SPEC-0011
-links: {"derived_from":["SPEC-0011"],"informed_by":[],"supersedes":[]}
+source: SPEC-0010
+links: {"derived_from":["SPEC-0010"],"informed_by":[],"supersedes":[]}
 related:
-  spec: SPEC-0011
-  review: REVIEW-0011
-  scratchpad: SCRATCH-0011
-  continuity: CONT-0011
-  knowledge: KB-0011
+  spec: SPEC-0010
+  review: REVIEW-0010
+  scratchpad: SCRATCH-0010
+  continuity: CONT-0010
+  knowledge: KB-0010
 tags: []
 ---
 

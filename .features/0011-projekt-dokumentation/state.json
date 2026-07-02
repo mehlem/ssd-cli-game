@@ -1,8 +1,8 @@
 {
-  "feature": "0010-projekt-dokumentation",
-  "feature_id": "0010-projekt-dokumentation",
-  "feature_path": "0010-projekt-dokumentation",
-  "feature_dir": ".features/0010-projekt-dokumentation",
+  "feature": "0011-projekt-dokumentation",
+  "feature_id": "0011-projekt-dokumentation",
+  "feature_path": "0011-projekt-dokumentation",
+  "feature_dir": ".features/0011-projekt-dokumentation",
   "feature_group": null,
   "phase": "close",
   "raw_phase": "close",
@@ -27,7 +27,7 @@
   },
   "task_source": {
     "mode": "root",
-    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0010-projekt-dokumentation/tasks.md",
+    "tasks_file": "C:/Users/mehlem/OneDrive - PTA-Gruppe/Lerning/KI/Claude-Code/SDD/SSD-Beispielprojekt/.features/0011-projekt-dokumentation/tasks.md",
     "work_packages": []
   },
   "work_packages": [],
@@ -59,7 +59,7 @@
   "knowledge_entries": 0,
   "has_summary": true,
   "has_summary_compact": true,
-  "scratchpad_path": ".features/0010-projekt-dokumentation/scratchpad.md",
+  "scratchpad_path": ".features/0011-projekt-dokumentation/scratchpad.md",
   "confidence": {
     "score": 0,
     "verdict": "pending"
